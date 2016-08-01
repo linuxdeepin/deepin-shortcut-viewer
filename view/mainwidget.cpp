@@ -1,11 +1,11 @@
 #include "mainwidget.h"
 #include <QtMath>
 
-MainWidget::MainWidget(QWidget *parent) : QWidget(parent)
+MainWidget::MainWidget(QWidget *parent) : QDialog(parent)
 {
     initUI();
 }
-MainWidget::MainWidget(QWidget *parent, QString url):QWidget(parent){
+MainWidget::MainWidget(QWidget *parent, QString url):QDialog(parent){
     m_url=url;
     initUI();
 
@@ -40,7 +40,7 @@ void MainWidget::initUI(){
                         "}");
     setContentsMargins(11,11,11,11);
     drawShadowPixmap();
-    qDebug()<<"*****************************"<< (m_scene->sceneRect());
+//    qDebug()<<"*****************************"<< (m_scene->sceneRect());
 }
 
 

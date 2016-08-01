@@ -23,11 +23,7 @@ QStringList CommandLineManager::args(){
     return m_commandLineParser.positionalArguments();
 }
 QString CommandLineManager::dir(){
-    QFile file(m_dir);
-    if(file.exists())
-        return m_dir;
-    else
-        return "";
+    return m_dir;
 }
 QPoint CommandLineManager::pos(){
     QString posStr;

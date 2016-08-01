@@ -10,9 +10,10 @@
 #include "shortcutscene.h"
 #include <QPixmap>
 #include <QImage>
+#include <QDialog>
 //#include "dwi"
 
-class MainWidget : public QWidget
+class MainWidget : public QDialog
 {
     Q_OBJECT
 public:

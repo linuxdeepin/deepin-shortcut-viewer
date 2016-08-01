@@ -8,6 +8,7 @@
 #include <QRect>
 #include <QPoint>
 #include <QFile>
+#include <QLocale>
 
 int main(int argc, char *argv[])
 {
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
     cmdManager.process(a);
 
     QString dir = cmdManager.dir();
+    dir = "/usr/share/dde-shortcut-viewer/"+dir+"/"+QLocale::system().name()+"/shortcut.txt";
     QPoint pos = cmdManager.pos();
 
     MainWidget w(0,dir);

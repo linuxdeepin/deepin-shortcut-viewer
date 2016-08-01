@@ -7,12 +7,14 @@
 QT       += core gui core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+include(cutelogger/cutelogger.pri)
 CONFIG += c++11
 
 DEFINES += QT_MESSAGELOGCONTEXT
 
 isEmpty(TARGET) {
-    TARGET = dde-shortcut-viewer
+    TARGET = deepin-shortcut-viewer
 }
 
 
@@ -36,7 +38,7 @@ SUBDIRS += \
 DISTFILES += \
     QLogger/LICENSE \
     QLogger/README.md
-include(../qlogger/cutelogger/cutelogger.pri)
+
 
 isEmpty(PREFIX){
     PREFIX = /usr

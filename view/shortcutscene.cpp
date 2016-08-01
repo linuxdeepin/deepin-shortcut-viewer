@@ -82,8 +82,8 @@ void ShortcutScene::initData(){
     m_displayShortcutLists[2] = new QList<Shortcut>();
 }
 void ShortcutScene::sortData(){
-    if(!m_shortcutList.count()>0)
-        return;
+//    if(!m_shortcutList.length()>0)
+//        return;
     int index = 0;
 
     for(int i=0;i<m_shortcutList.count();i++){
@@ -144,7 +144,7 @@ void ShortcutScene::loadFile(QString file){
             str="[Tips] \n"
                 "Setp 1:=Shortcut folder should be named as your-app-name \n"
                 "Setp 2:=Please copy shortcut file to /usr/share/dde-shortcut-viewer/your-app-name \n"
-                "Setp 3:=Different language files should be copied to related folder eg(chinise)./ \n"
+                "Setp 3:=Different language files should be copied to related folder eg(China)./ \n"
                 " *=your-app-name/ZH_ch/shortcut.txt,folder archs is: \n"
                 " =your-app-name/ZH_ch/shortcut.txt \n"
                 " =your-app-name/EN_us/shortcut.txt \n"
@@ -158,10 +158,10 @@ void ShortcutScene::loadFile(QString file){
         str="[Tips] \n"
             "Setp 1:=Shortcut folder should be named as your-app-name \n"
             "Setp 2:=Please copy shortcut file to /usr/share/dde-shortcut-viewer/your-app-name \n"
-            "Setp 3:=Different language files should be copied to related folder eg(chinise)./ \n"
-            " *=your-app-name/ZH_ch/shortcut.txt,folder archs is: \n"
-            " =your-app-name/ZH_ch/shortcut.txt \n"
-            " =your-app-name/EN_us/shortcut.txt \n"
+            "Setp 3:=Different language files should be copied to related folder eg(China)./ \n"
+            " *=your-app-name/zh_CN/shortcut.txt,folder archs is: \n"
+            " =your-app-name/en_US/shortcut.txt \n"
+            " =your-app-name/en_EN/shortcut.txt \n"
             " =your-app-name/.../shorcut.txt \n"
             "Step 4:=To run this app,just use command line :dde-shortcut-viewer your-app-name \n"
             " =eg:dde-shortcut-viewer dde-file-manager (defaut it will be center in the screen) \n"
@@ -203,7 +203,7 @@ void ShortcutScene::loadFile(QString file){
     foreach (Shortcut sc, m_shortcutList) {
         if(sc.value!="type")
             continue;
-        qDebug()<<"nl:"<<sc.nameLength<<", vl:"<<sc.valueLength<<",n:"<<sc.name<<",v:"<<sc.value;
+//        qDebug()<<"nl:"<<sc.nameLength<<", vl:"<<sc.valueLength<<",n:"<<sc.name<<",v:"<<sc.value;
     }
     sortData();
     initUI();
