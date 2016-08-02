@@ -5,6 +5,7 @@ ShortcutScene::ShortcutScene(QObject *parent)
     :QGraphicsScene(parent)
 {
     initData();
+    setFocus(Qt::MouseFocusReason);
 }
 void ShortcutScene::initUI(){
     for(int a = 0; a<6;a++){
@@ -70,65 +71,109 @@ void ShortcutScene::initUI(){
             index++;
         }
     }
-//    setSceneRect(44,44,m_maxContentWidth,m_maxContentHeigth);
+//    setSceneRect(0,0,m_maxContentWidth,m_maxContentHeigth);
+
 
 }
 void ShortcutScene::initData(){
-    m_maxContentHeigth = qApp->desktop()->height()*0.8-99;
-    m_maxContentWidth = qApp->desktop()->width()*0.8-99;
+    m_maxContentHeigth = qApp->desktop()->height()*0.8;
+    m_maxContentWidth = qApp->desktop()->width()*0.8-150;
 
     m_displayShortcutLists[0] = new QList<Shortcut>();
     m_displayShortcutLists[1] = new QList<Shortcut>();
     m_displayShortcutLists[2] = new QList<Shortcut>();
 }
 void ShortcutScene::sortData(){
-//    if(!m_shortcutList.length()>0)
-//        return;
-    int index = 0;
+    int offset = m_shortcutList.count()%3;
+    int average = (int)m_shortcutList.count()/3;
 
-    for(int i=0;i<m_shortcutList.count();i++){
-        if(index==3){//out of col range
-            qDebug()<<"out of range";
-            return;
+    int i=0;
+    int colLsength[3]={0,0,0};
+    for(auto it:m_shortcutList){
+        Shortcut preData;
+        if(i%average>0)
+            preData=m_shortcutList.at(i-1);
+        //prehandle first column of whether the last item is a type,and tansfer it to next column
+        if(i==(average+offset-1)&&it.value=="type"){
+            colLsength[1]+=18;
+            it.y=m_starty;
+            m_displayShortcutLists[1]->append(it);
+        }
+        else{
+            if(i<average+offset){//first col
+                if(i==0&&it.value=="type"){
+                    colLsength[0]+=18;
+                    it.y=m_starty;
+                    m_displayShortcutLists[0]->append(it);
+                }
+                else if(it.value=="type"&&i>0){
+                    colLsength[0]+=58;
+                    it.y=m_starty+colLsength[0]-18;
+                    m_displayShortcutLists[0]->append(it);
+                }
+                else if(it.value!="type"&&i==0){
+                    colLsength[0]+=13;
+                    it.y=m_starty;
+                    m_displayShortcutLists[0]->append(it);
+                }
+                else if(it.value!="type"&&i>0&&preData.value!="type"){
+                    colLsength[0]+=29;
+                    it.y=m_starty+colLsength[0]-13;
+                    m_displayShortcutLists[0]->append(it);
+                }
+                else if(it.value!="type"&&i>0&&preData.value=="type"){
+                    colLsength[0]+=33;
+                    it.y=m_starty+colLsength[0]-13;
+                    m_displayShortcutLists[0]->append(it);
+                }
             }
-//        qDebug()<<index;
-        m_displayShortcutLists[index]->append(m_shortcutList.at(i));
+            else{
+                //prehandle second column of whether the last item is a type,and transfer it ot next column
+                if((i-offset)%average==(average-1)&&it.value=="type"){
+                    colLsength[2]+=18;
+                    it.y=m_starty;
+                    m_displayShortcutLists[2]->append(it);
+                }
+                else{
+                    if((i-offset)%average==0&&it.value=="type"){
+                        colLsength[(i-offset)/average]+=18;
+                        it.y=m_starty;
+                        m_displayShortcutLists[(i-offset)/average]->append(it);
+                    }
+                    else if(it.value=="type"&&(i-offset)%average>0){
+                        colLsength[(i-offset)/average]+=58;
+                        it.y=m_starty+colLsength[(i-offset)/average]-18;
+                        m_displayShortcutLists[(i-offset)/average]->append(it);
+                    }
+                    else if(it.value!="type"&&(i-offset)%average==0){
+                        if(colLsength[(i-offset)/average]>0){
+                            colLsength[(i-offset)/average]+=29;
+                            it.y=m_starty+colLsength[(i-offset)/average]-13;
+                        }
+                        else{
+                            it.y=m_starty;
+                            colLsength[(i-offset)/average]+=13;
+                        }
 
-        //caculate current col's length
-        int colLength=0;
-        for (int j=0;j<m_displayShortcutLists[index]->length();j++) {
-            Shortcut data=m_displayShortcutLists[index]->at(j);
-            if(data.value=="type"&&j==0){
-                colLength+=18;
-                data.y=m_starty;
-                m_displayShortcutLists[index]->replace(j,data);
+                        m_displayShortcutLists[(i-offset)/average]->append(it);
+                    }
+                    else if(it.value!="type"&&(i-offset)%average>0&&preData.value!="type"){
+                        colLsength[(i-offset)/average]+=29;
+                        it.y=m_starty+colLsength[(i-offset)/average]-13;
+                        m_displayShortcutLists[(i-offset)/average]->append(it);
+                    }
+                    else if(it.value!="type"&&(i-offset)%average>0&&preData.value=="type"){
+                        colLsength[(i-offset)/average]+=33;
+                        it.y=m_starty+colLsength[(i-offset)/average]-13;
+                        m_displayShortcutLists[(i-offset)/average]->append(it);
+                    }
+                }
+
             }
 
-            else if(data.value=="type"&&j>0){
-                colLength+=58;
-                data.y=m_starty+colLength-18;
-                m_displayShortcutLists[index]->replace(j,data);
-            }
-            else if(data.value!="type"&&j==0){
-                colLength+=13;
-                data.y=m_starty;
-                m_displayShortcutLists[index]->replace(j,data);
-            }
-            else if(data.value!="type"&&j>0){
-                colLength+=27;
-                data.y=m_starty+colLength-13;
-                m_displayShortcutLists[index]->replace(j,data);
-            }
         }
 
-        if(colLength==m_maxContentHeigth){
-            colLength=0;
-            index++;
-        }
-        else if(colLength>m_maxContentHeigth){
-            colLength=0;
-            index++;
-        }
+        i++;
     }
 
 }
@@ -203,12 +248,9 @@ void ShortcutScene::loadFile(QString file){
     foreach (Shortcut sc, m_shortcutList) {
         if(sc.value!="type")
             continue;
-//        qDebug()<<"nl:"<<sc.nameLength<<", vl:"<<sc.valueLength<<",n:"<<sc.name<<",v:"<<sc.value;
     }
     sortData();
     initUI();
+    setSceneRect(0,0,this->sceneRect().width(),this->sceneRect().height());
 }
-void ShortcutScene::focusOutEvent(QFocusEvent *event){
-    if(event->lostFocus())
-        qApp->quit();
-}
+

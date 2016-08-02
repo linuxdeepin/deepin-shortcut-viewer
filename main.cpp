@@ -28,8 +28,9 @@ int main(int argc, char *argv[])
     MainWidget w(0,dir);
     pos-=QPoint(w.width()/2,w.height()/2);
 
-    w.show();
     w.move(pos);
+    w.show();
+    w.activateWindow();
 
     return a.exec();
 }

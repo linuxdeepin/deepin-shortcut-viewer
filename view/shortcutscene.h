@@ -33,8 +33,6 @@ public:
     void sortData();
     void loadFile(QString file);
 
-protected:
-    void focusOutEvent(QFocusEvent *event);
 private:
 //    ShortcutList *m_shortcutList;
     QList<Shortcut>* m_displayShortcutLists[3];
@@ -43,8 +41,8 @@ private:
     int m_maxContentWidth=0;
     QList<QGraphicsTextItem*>* m_listTextItems[6];
     Column m_cols[6];
-    const int m_startx=44;
-    const int m_starty=44;
+    const int m_startx=0;
+    const int m_starty=0;
 };
 
 #endif // SHORTCUTSCENE_H
