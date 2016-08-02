@@ -13,7 +13,8 @@ MainWidget::MainWidget(QWidget *parent, QString url):QDialog(parent){
 }
 
 void MainWidget::initUI(){
-    setWindowFlags(Qt::FramelessWindowHint|Qt::SplashScreen|Qt::Popup|Qt::WindowStaysOnTopHint|Qt::WindowTransparentForInput);
+
+    setWindowFlags(Qt::FramelessWindowHint|Qt::SplashScreen|Qt::Popup|Qt::WindowStaysOnTopHint);
 
     setAttribute(Qt::WA_TranslucentBackground, true);
     resize(maximumSize());
@@ -106,4 +107,7 @@ void MainWidget::paintEvent(QPaintEvent *event){
     QDialog::paintEvent(event);
 }
 
-
+void MainWidget::mousePressEvent(QMouseEvent *e){
+    qApp->quit();
+    QDialog::mousePressEvent(e);
+}

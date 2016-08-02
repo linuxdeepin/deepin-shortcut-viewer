@@ -24,6 +24,8 @@ signals:
 protected:
     void paintEvent(QPaintEvent*) override;
 
+    void mousePressEvent(QMouseEvent *e);
+
 private:
     void initUI();
     QImage drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
