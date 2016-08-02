@@ -34,7 +34,6 @@ public:
     void loadFile(QString file);
 
 private:
-//    ShortcutList *m_shortcutList;
     QList<Shortcut>* m_displayShortcutLists[3];
     QList<Shortcut> m_shortcutList;
     int m_maxContentHeigth=0;

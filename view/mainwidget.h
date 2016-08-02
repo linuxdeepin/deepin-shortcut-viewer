@@ -11,8 +11,6 @@
 #include <QPixmap>
 #include <QImage>
 #include <QDialog>
-//#include <QMargins>
-//#include "dwi"
 
 class MainWidget : public QDialog
 {
@@ -25,8 +23,7 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent*) override;
-    bool event(QEvent *e);
-public slots:
+
 private:
     void initUI();
     QImage drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
@@ -37,7 +34,6 @@ private:
     QString m_url;
     QPixmap m_shadowPixmap;
     int m_shadowRadius=10;
-//    QMargins m_margins;
 
 };
 

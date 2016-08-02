@@ -9,28 +9,47 @@
 #include <QPoint>
 #include <QFile>
 #include <QLocale>
+#include "singleapplication.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    //Singlentan process
+    SingleApplication app(argc,argv);
 
+    //Logger handle
     LogManager::instance()->debug_log_console_on();
-    a.setOrganizationName("deepin");
-    a.setApplicationName(QObject::tr("Deepin Shortcut Viewer"));
-    a.setApplicationVersion("v1.0");
+
+    app.setOrganizationName("deepin");
+    app.setApplicationName(QObject::tr("Deepin Shortcut Viewer"));
+    app.setApplicationVersion("v1.0");
+
+    //Command manager
     CommandLineManager cmdManager;
-    cmdManager.process(a);
+    cmdManager.process(app);
 
-    QString dir = cmdManager.dir();
-    dir = "/usr/share/dde-shortcut-viewer/"+dir+"/"+QLocale::system().name()+"/shortcut.txt";
-    QPoint pos = cmdManager.pos();
+    MainWidget *w;
 
-    MainWidget w(0,dir);
-    pos-=QPoint(w.width()/2,w.height()/2);
+    QString uniqueKey = app.applicationName();
+    bool isSingleApplication = app.setSingleInstance(uniqueKey);
 
-    w.move(pos);
-    w.show();
-    w.activateWindow();
+    //Handle singlelentan process communications;
+    if(isSingleApplication){
+        QString dir = cmdManager.dir();
+        if(dir=="")
+            return 0;
 
-    return a.exec();
+        dir = "/usr/share/deepin-shortcut-viewer/"+dir+"/"+QLocale::system().name()+"/shortcut.txt";
+        QPoint pos = cmdManager.pos();
+
+        w=new MainWidget(0,dir);
+        pos-=QPoint(w->width()/2,w->height()/2);
+        w->move(pos);
+        w->show();
+        return app.exec();
+    }
+    else{
+        app.newClientProcess(uniqueKey,"close");
+        return 0;
+    }
+
 }

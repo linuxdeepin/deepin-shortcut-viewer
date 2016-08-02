@@ -8,8 +8,8 @@ CommandLineManager::CommandLineManager()
     m_commandLineParser.setApplicationDescription("Test helper");
     m_commandLineParser.addHelpOption();
     m_commandLineParser.addVersionOption();
-    m_commandLineParser.addPositionalArgument("source", QCoreApplication::translate("main", "Source file to startup.eg:/home/deepin/shortcut.txt"));
-    m_commandLineParser.addPositionalArgument("window state", QCoreApplication::translate("main", "Use format [x,y,w,h] to localize shortcut's position.eg:100,50,900,500"));
+    m_commandLineParser.addPositionalArgument("Application", QCoreApplication::translate("main", "Your Application name ,eg:dde-file-manager"));
+    m_commandLineParser.addPositionalArgument("window state", QCoreApplication::translate("main", "Your window's rect [x,y,w,h] to be center in ,eg:100,50,900,500"));
 
 }
 void CommandLineManager::process(QApplication &app){
@@ -28,7 +28,7 @@ QString CommandLineManager::dir(){
 QPoint CommandLineManager::pos(){
     QString posStr;
     if(m_strls.length()==2)
-        posStr=m_strls.at(1);
+        posStr=m_strls[1];
 
     QStringList posStrs=posStr.split(",");
 

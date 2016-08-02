@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui core
+QT       += core gui core network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -24,12 +24,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
     view/shortcutscene.cpp \
     view/mainwidget.cpp \
-    commandlinemanager.cpp
+    commandlinemanager.cpp \
+    singleapplication.cpp
 
 HEADERS  += \
     view/shortcutscene.h \
     view/mainwidget.h \
-    commandlinemanager.h
+    commandlinemanager.h \
+    singleapplication.h
 
 
 SUBDIRS += \

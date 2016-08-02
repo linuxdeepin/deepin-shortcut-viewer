@@ -187,32 +187,19 @@ void ShortcutScene::loadFile(QString file){
             str=f.readAll();
         else
             str="[Tips] \n"
-                "Setp 1:=Shortcut folder should be named as your-app-name \n"
-                "Setp 2:=Please copy shortcut file to /usr/share/dde-shortcut-viewer/your-app-name \n"
-                "Setp 3:=Different language files should be copied to related folder eg(China)./ \n"
-                " *=your-app-name/ZH_ch/shortcut.txt,folder archs is: \n"
-                " =your-app-name/ZH_ch/shortcut.txt \n"
-                " =your-app-name/EN_us/shortcut.txt \n"
-                " =your-app-name/.../shorcut.txt \n"
-                "Step 4:=To run this app,just use command line :dde-shortcut-viewer your-app-name \n"
-                " =eg:dde-shortcut-viewer dde-file-manager (defaut it will be center in the screen) \n"
-                " =or dde-shortcut-viewer  your-app-name your-app-rect-to-center-in \n "
-                " =eg:dde-shortcut-viewer dde-file-manager 300,200,700,500 (it will center mustomized) \n"
-                " *=About your-app-rect-to-center-in is a format as:x,y,w,h eg:10,10,20,20 \n";    }
+                "Shortcut path: = /usr/share/deepin-shortcut-viewer\n"
+                "Command: = deepin-shortcut-viewer <-h> appName order rect\n"
+                "appName:= is your install app name\n"
+                "order: = open or close \n"
+                "rect: =x,y,w,h eg:10,10,100,100\n";
+    }
     else
         str="[Tips] \n"
-            "Setp 1:=Shortcut folder should be named as your-app-name \n"
-            "Setp 2:=Please copy shortcut file to /usr/share/dde-shortcut-viewer/your-app-name \n"
-            "Setp 3:=Different language files should be copied to related folder eg(China)./ \n"
-            " *=your-app-name/zh_CN/shortcut.txt,folder archs is: \n"
-            " =your-app-name/en_US/shortcut.txt \n"
-            " =your-app-name/en_EN/shortcut.txt \n"
-            " =your-app-name/.../shorcut.txt \n"
-            "Step 4:=To run this app,just use command line :dde-shortcut-viewer your-app-name \n"
-            " =eg:dde-shortcut-viewer dde-file-manager (defaut it will be center in the screen) \n"
-            " =or dde-shortcut-viewer  your-app-name your-app-rect-to-center-in \n "
-            " =eg:dde-shortcut-viewer dde-file-manager 300,200,700,500 (it will center mustomized) \n"
-            " *=About your-app-rect-to-center-in is a format as:x,y,w,h eg:10,10,20,20 \n";
+            "Shortcut path: = /usr/share/deepin-shortcut-viewer\n"
+            "Command: = deepin-shortcut-viewer <-h> appName order rect\n"
+            "appName:= is your install app name\n"
+            "order: = open or close \n"
+            "rect: =x,y,w,h eg:10,10,100,100\n";
 
     f.close();
     QStringList strls=str.split("\n");
