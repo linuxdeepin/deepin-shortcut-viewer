@@ -27,8 +27,6 @@ int main(int argc, char *argv[])
     CommandLineManager cmdManager;
     cmdManager.process(app);
 
-    MainWidget *w;
-
     QString uniqueKey = app.applicationName();
     bool isSingleApplication = app.setSingleInstance(uniqueKey);
 
@@ -41,7 +39,7 @@ int main(int argc, char *argv[])
         dir = "/usr/share/deepin-shortcut-viewer/"+dir+"/"+QLocale::system().name()+"/shortcut.txt";
         QPoint pos = cmdManager.pos();
 
-        w=new MainWidget(0,dir);
+        MainWidget *w = new MainWidget(0,dir);
         pos-=QPoint(w->width()/2,w->height()/2);
         w->move(pos);
         w->show();

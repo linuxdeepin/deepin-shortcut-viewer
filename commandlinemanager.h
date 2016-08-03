@@ -9,13 +9,15 @@ class CommandLineManager
 public:
     CommandLineManager();
     void process(QApplication &app);
-    QStringList args();
+//    QStringList args();
     QString dir();
     QPoint pos();
 private:
     QCommandLineParser m_commandLineParser;
-    QStringList m_strls;
-    QString m_dir="";
+    QCommandLineOption m_targetOption;
+    QCommandLineOption m_rectOption;
+//    QStringList m_strls;
+//    QString m_dir="";
 };
 
 #endif // COMMANDLINEMANAGER_H
