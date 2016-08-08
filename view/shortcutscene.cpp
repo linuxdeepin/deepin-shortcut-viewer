@@ -37,7 +37,7 @@ void ShortcutScene::initUI(){
 
             nametextItem->setPlainText(data.name);
             nametextItem->setDefaultTextColor(Qt::white);
-            valueTextItem->setDefaultTextColor(Qt::white);
+            valueTextItem->setDefaultTextColor(QColor(255,255,255,0.8*255));
             addItem(nametextItem);
             addItem(valueTextItem);
             m_listTextItems[i*2]->append(nametextItem);

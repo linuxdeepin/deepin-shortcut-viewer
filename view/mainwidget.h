@@ -11,6 +11,7 @@
 #include <QPixmap>
 #include <QImage>
 #include <QDialog>
+#define CONTENT_MARGINS 20
 
 class MainWidget : public QDialog
 {
@@ -35,7 +36,7 @@ private:
     ShortcutScene *m_scene;
     QString m_url;
     QPixmap m_shadowPixmap;
-    int m_shadowRadius=10;
+    int m_shadowRadius=20;
 
 };
 

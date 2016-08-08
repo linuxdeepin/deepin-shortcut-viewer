@@ -30,14 +30,15 @@ void MainWidget::initUI(){
     m_scene=new ShortcutScene(this);
     m_scene->loadFile(m_url);
     m_mainView->setScene(m_scene);
-    m_mainView->resize(m_scene->sceneRect().width()+88,m_scene->sceneRect().height()+80);    this->resize(m_mainView->size().width()+22,m_mainView->size().height()+22);
+    m_mainView->resize(m_scene->sceneRect().width()+88,m_scene->sceneRect().height()+80);
+    this->resize(m_mainView->size().width()+CONTENT_MARGINS*2,m_mainView->size().height()+CONTENT_MARGINS*2);
     setLayout(m_mainLayout);
     this->setStyleSheet("QGraphicsView#MainView{"
                             "background:rgba(0,0,0,0.7);"
                             "border-radius: 4px 4px 4px 4px;"
 //                            "border: 2px solid rgba(255,255,255,0.15);"
                         "}");
-    setContentsMargins(11,11,11,11);
+    setContentsMargins(CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS);
     drawShadowPixmap();
 }
 
@@ -84,7 +85,7 @@ QImage MainWidget::drawShadow(const QPixmap &px, qreal radius, const QColor &col
 void MainWidget::drawShadowPixmap(){
     QPixmap pixmap(size()+QSize(6,3));
 
-    pixmap.fill(QColor(0,0,0,80));
+    pixmap.fill(QColor(0,0,0,100));
 
     m_shadowPixmap = QPixmap::fromImage(drawShadow(pixmap, m_shadowRadius));
 
@@ -103,7 +104,8 @@ void MainWidget::paintEvent(QPaintEvent *event){
     pen.setCosmetic(true);
     painter.setPen(pen);
     painter.setRenderHint(QPainter::Antialiasing,true);
-    painter.drawRoundedRect(10,10,m_mainView->width()+2,m_mainView->height()+2,5,5);
+    //draw rounded border
+    painter.drawRoundedRect(CONTENT_MARGINS-1,CONTENT_MARGINS-1,m_mainView->width()+2,m_mainView->height()+2,5,5);
     QDialog::paintEvent(event);
 }
 
