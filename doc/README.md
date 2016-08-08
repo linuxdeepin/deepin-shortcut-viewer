@@ -3,7 +3,7 @@
 源码地址：https://tommego@cr.deepin.io/a/deepin-shortcut-viewer
 #### 1. 快捷键文档目录位置:usr/share/deepin-shortcut-viewer
 >  * 快捷键目录结构：
- >![快捷键目录结构图](./fil-tree.png)              
+ >![快捷键目录结构图](./file-tree.png)              
 >  * 每个应用程序可以在这个目录创建自己的快捷键文档，拿文件管理器为例：文件管理器的应用明是 dde-file-manager，拿文件管理器可以在这里创建目录：usr/share/deepin-shortcut-viewer/dde-file-manager。然后把快捷键文件拷进这个目录。
 >  * 由于快捷键文档要支持多语言，所以需要把翻译好的shortcut文档拷进对应语言目录中，比如中文：~/deepin-shortcut-viewer/dde-file-manager/zh_CN/shortcut.txt；英文：~/deepin-shortcut-viewer/dde-file-manager/en_US/shortcut.txt，等等。
 #### 2. 快捷键文档格式：shortcut.txt
