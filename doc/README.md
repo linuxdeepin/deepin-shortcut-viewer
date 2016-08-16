@@ -22,7 +22,7 @@
 >     标题2=快捷键符
 >     .
 >     .
->     . 
+>     .
 ##### 当快捷键文件都拷贝对应程序明的目录后，就可以通过命令行调用打开快捷键预览界面了，deepin-shortcut-viewer 是一个单进程应用，当第一次启动后，如果再调用一次，它就会关闭。于此类推来控制显示快捷键预览或者关闭快捷键预览。下面介绍如何通过命令行调用快捷键。
 ![Alt text](./cmd.png)
 打开命令：deepin-shortcut-viewer -h看帮助
@@ -35,3 +35,99 @@
 >
 >  应用截图：
 >  ![应用截图](./preview.png)
+#### 3,直接通过传送json数据
+json 数据格式如下：
+~~~json
+{
+    "shortcut": [
+        {
+            "groupItems": [
+                {
+                    "name": "name0",
+                    "value": "value0"
+                },
+                {
+                    "name": "name1",
+                    "value": "value1"
+                },
+                {
+                    "name": "name2",
+                    "value": "value2"
+                }
+            ],
+            "groupName": "group0"
+        },
+        {
+            "groupItems": [
+                {
+                    "name": "name0",
+                    "value": "value0"
+                },
+                {
+                    "name": "name1",
+                    "value": "value1"
+                },
+                {
+                    "name": "name2",
+                    "value": "value2"
+                }
+            ],
+            "groupName": "group1"
+        }
+    ]
+}
+~~~
+
+数据的root为shortcut每个object中,groupName是快捷键分组标签；groupItems是该分组的快捷键；groupItems中,name为快捷键标签，value为快捷键符号。
+
+### 程序实现实例：
+
+~~~c++
+#include "widget.h"
+
+#include <QApplication>
+#include <QProcess>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+
+int main(int argc, char *argv[])
+{
+
+    QApplication a(argc, argv);
+
+    QJsonObject root;
+    QJsonArray shortcuts;
+
+    for(int a = 0; a<2;a++){
+
+        QJsonObject group;
+        QJsonArray items;
+        group.insert("groupName","group" + QString::number(a));
+
+        for(int b = 0; b<3; b++){
+            QJsonObject item;
+            item.insert("name","name" + QString::number(b));
+            item.insert("value","value" + QString::number(b));
+            items.append(item);
+        }
+        group.insert("groupItems",items);
+        shortcuts.append(group);
+    }
+    root.insert("shortcut",shortcuts);
+
+    QJsonDocument doc(root);
+    QStringList args;
+    QString param = "-j=";
+    param+=doc.toJson().data();
+    args<<param<<"-r=200,200,20,20";
+    QProcess::startDetached("deepin-shortcut-viewer",args);
+
+    return a.exec();
+}
+
+~~~
+
+程序截图：
+
+![应用截图](./preview1.png)

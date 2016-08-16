@@ -9,13 +9,17 @@ CommandLineManager::CommandLineManager():
                    QCoreApplication::translate("main", " ")),
     m_rectOption(QStringList()<<"r"<<"rect",
                  QCoreApplication::translate("main","Expose your  window's rect(x,y,w,h) info where the deepin-shorcut-viwer can center int your window relativly,otherwise it will center in the current screen. eg: -r=100,50,900,500/--rect=100,50,900,50"),
-                 " ")
+                 " "),
+    m_jsonDataOption(QStringList()<<"j"<<"json-data",
+                     QCoreApplication::translate("main","Directly convert a json data to this program ,see https://github.com/tommego/deepin-shortcut-viewer  for more information of this decscription"),
+                     " ")
 {
     m_commandLineParser.setApplicationDescription("Test helper");
     m_commandLineParser.addHelpOption();
     m_commandLineParser.addVersionOption();
     m_commandLineParser.addOption(m_targetOption);
     m_commandLineParser.addOption(m_rectOption);
+    m_commandLineParser.addOption(m_jsonDataOption);
 }
 void CommandLineManager::process(QApplication &app){
     m_commandLineParser.process(app);
@@ -28,6 +32,10 @@ QString CommandLineManager::dir(){
 
     return m_commandLineParser.value(m_targetOption);
 }
+QString CommandLineManager::jsonData(){
+    return m_commandLineParser.value(m_jsonDataOption);
+}
+
 QPoint CommandLineManager::pos(){
     QString posStr = m_commandLineParser.value(m_rectOption);
 

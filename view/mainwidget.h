@@ -17,8 +17,8 @@ class MainWidget : public QDialog
 {
     Q_OBJECT
 public:
-    explicit MainWidget(QWidget *parent = 0);
-    explicit MainWidget(QWidget *parent,QString url);
+     MainWidget(QWidget *parent = 0);
+     MainWidget(QWidget *parent = 0 ,QString data = "" ,int flag = 0);
 
 signals:
 
@@ -29,14 +29,13 @@ protected:
 
 private:
     void initUI();
-    QImage drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
-    void drawShadowPixmap();
-    QGraphicsView *m_mainView;
-    QVBoxLayout *m_mainLayout;
-    ShortcutScene *m_scene;
-    QString m_url;
-    QPixmap m_shadowPixmap;
-    int m_shadowRadius=20;
+    QImage              drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
+    void                drawShadowPixmap();
+    QGraphicsView       *m_mainView;
+    QVBoxLayout         *m_mainLayout;
+    ShortcutScene       *m_scene;
+    QPixmap             m_shadowPixmap;
+    int                 m_shadowRadius=20;
 
 };
 

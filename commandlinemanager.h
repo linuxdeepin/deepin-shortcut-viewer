@@ -8,16 +8,15 @@ class CommandLineManager
 {
 public:
     CommandLineManager();
-    void process(QApplication &app);
-//    QStringList args();
-    QString dir();
-    QPoint pos();
+    void        process(QApplication &app);
+    QString     dir();
+    QPoint      pos();
+    QString     jsonData();
 private:
-    QCommandLineParser m_commandLineParser;
-    QCommandLineOption m_targetOption;
-    QCommandLineOption m_rectOption;
-//    QStringList m_strls;
-//    QString m_dir="";
+    QCommandLineParser      m_commandLineParser;
+    QCommandLineOption      m_targetOption;
+    QCommandLineOption      m_rectOption;
+    QCommandLineOption      m_jsonDataOption;
 };
 
 #endif // COMMANDLINEMANAGER_H

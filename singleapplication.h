@@ -13,22 +13,22 @@ class SingleApplication : public QApplication
 public:
     explicit SingleApplication(int &argc, char **argv, int = ApplicationFlags);
     ~SingleApplication();
-    void initConnect();
+    void        initConnect();
 
-    void newClientProcess(const QString& key,QString order);
-    static QString userServerName(const QString& key);
-    static QString userID();
-    static QString UserID;
+    void        newClientProcess(const QString& key,QString order);
+    static      QString userServerName(const QString& key);
+    static      QString userID();
+    static      QString UserID;
 
 signals:
 
 public slots:
-    bool setSingleInstance(const QString& key);
-    void handleConnection();
-    void readData();
+    bool        setSingleInstance(const QString& key);
+    void        handleConnection();
+    void        readData();
 
 private:
-    QLocalServer* m_localServer;
+    QLocalServer*   m_localServer;
 };
 
 #endif // SINGLEAPPLICATION_H

@@ -4,12 +4,11 @@
 MainWidget::MainWidget(QWidget *parent) : QDialog(parent)
 {
     initUI();
+    m_scene = new ShortcutScene(this);
 }
-MainWidget::MainWidget(QWidget *parent, QString url):QDialog(parent){
-    m_url=url;
+MainWidget::MainWidget(QWidget *parent, QString data , int flag): QDialog(parent){
+    m_scene = new ShortcutScene(this,data ,flag);
     initUI();
-
-
 }
 
 void MainWidget::initUI(){
@@ -27,8 +26,8 @@ void MainWidget::initUI(){
     m_mainView->resize(size());
     m_mainLayout->addWidget(m_mainView);
 
-    m_scene=new ShortcutScene(this);
-    m_scene->loadFile(m_url);
+//    m_scene=new ShortcutScene(this);
+//    m_scene->loadFile(m_url);
     m_mainView->setScene(m_scene);
     m_mainView->resize(m_scene->sceneRect().width()+88,m_scene->sceneRect().height()+80);
     this->resize(m_mainView->size().width()+CONTENT_MARGINS*2,m_mainView->size().height()+CONTENT_MARGINS*2);

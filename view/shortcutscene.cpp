@@ -1,5 +1,9 @@
 #include "shortcutscene.h"
 #include <QtMath>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonParseError>
+#include <QJsonObject>
 
 ShortcutScene::ShortcutScene(QObject *parent)
     :QGraphicsScene(parent)
@@ -7,6 +11,83 @@ ShortcutScene::ShortcutScene(QObject *parent)
     initData();
     setFocus(Qt::MouseFocusReason);
 }
+ShortcutScene::ShortcutScene(QObject *parent, QString data ,int flag)
+    :QGraphicsScene(parent){
+    if(flag == 0){
+        QString dir = data;
+        initData();
+        setFocus(Qt::MouseFocusReason);
+        loadFile(dir);
+    }
+    else if (flag ==1){
+        QString jsonData = data;
+        initData();
+        setFocus(Qt::MouseFocusReason);
+        QByteArray data;
+        data.append(jsonData);
+        QJsonParseError jsError;
+        QJsonDocument doc = QJsonDocument::fromJson(data,&jsError);
+        QJsonObject obj;
+        QJsonArray shortcuts;
+        if(jsError.error == QJsonParseError::NoError){
+            if(doc.isObject()){
+                obj = doc.object();
+                if(obj.contains("shortcut")){
+                    QJsonValue value;
+                    value = obj.value("shortcut");
+                    if(value.isArray()){
+                        shortcuts = value.toArray();
+                    }
+                }
+            }
+        }
+        else {
+            qDebug()<<"Json data parsing error:"<<jsError.error<<jsError.errorString();
+            return;
+        }
+
+        foreach (QJsonValue value, shortcuts) {
+            QJsonObject obj = value.toObject();
+            Shortcut sc;
+            sc.name=obj["groupName"].toString();
+            sc.value="type";
+            QFont font;
+            font.setPixelSize(18);
+            QFontMetrics fm(font);
+            sc.nameLength=fm.width(sc.name);
+            sc.valueLength=0;
+            m_shortcutList.append(sc);
+            QJsonArray items = obj["groupItems"].toArray();
+            foreach(QJsonValue itemvalue ,items){
+                QJsonObject item = itemvalue.toObject();
+                Shortcut sc1;
+                sc1.name = item["name"].toString();
+                sc1.value = item["value"].toString();
+                QFont font;
+                font.setPixelSize(13);
+                QFontMetrics fm(font);
+                sc1.nameLength=fm.width(sc1.name);
+                sc1.valueLength=fm.width(sc1.value);
+                m_shortcutList.append(sc1);
+            }
+        }
+
+        sortData();
+        initUI();
+        setSceneRect(0,0,this->sceneRect().width(),this->sceneRect().height());
+    }
+    else
+        return;
+
+
+}
+//ShortcutScene::ShortcutScene(QObject *parent, QString url)
+//    :QGraphicsScene(parent){
+//    initData();
+//    setFocus(Qt::MouseFocusReason);
+//    loadFile(url);
+//}
+
 void ShortcutScene::initUI(){
     for(int a = 0; a<6;a++){
         m_listTextItems[a] = new QList<QGraphicsTextItem*>();
@@ -194,7 +275,8 @@ void ShortcutScene::loadFile(QString file){
                 "rect: =x,y,w,h eg:10,10,100,100\n";
     }
     else
-        str="[Tips] \n"
+        str="[file not found] \n"
+            "[Tips] \n"
             "Shortcut path: = /usr/share/deepin-shortcut-viewer\n"
             "Command: = deepin-shortcut-viewer <-h> appName order rect\n"
             "appName:= is your install app name\n"

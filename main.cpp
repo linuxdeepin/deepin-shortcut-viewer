@@ -10,6 +10,9 @@
 #include <QFile>
 #include <QLocale>
 #include "singleapplication.h"
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
 
 int main(int argc, char *argv[])
 {
@@ -33,17 +36,30 @@ int main(int argc, char *argv[])
     //Handle singlelentan process communications;
     if(isSingleApplication){
         QString dir = cmdManager.dir();
-        if(dir=="")
+        QString jsonData = cmdManager.jsonData();
+
+        if(jsonData == "" && dir =="")
             return 0;
 
-        dir = "/usr/share/deepin-shortcut-viewer/"+dir+"/"+QLocale::system().name()+"/shortcut.txt";
         QPoint pos = cmdManager.pos();
 
-        MainWidget *w = new MainWidget(0,dir);
-        pos-=QPoint(w->width()/2,w->height()/2);
-        w->move(pos);
-        w->show();
-        return app.exec();
+        if((dir != ""&&jsonData == "")||(dir != ""&&jsonData != "")){
+            dir = "/usr/share/deepin-shortcut-viewer/"+dir+"/"+QLocale::system().name()+"/shortcut.txt";
+            MainWidget *w = new MainWidget(0,dir,0);
+            pos-=QPoint(w->width()/2,w->height()/2);
+            w->move(pos);
+            w->show();
+            return app.exec();
+        }
+        else if(dir == "" && jsonData !=""){
+            MainWidget *w = new MainWidget(0,jsonData ,1);
+            pos-=QPoint(w->width()/2,w->height()/2);
+            w->move(pos);
+            w->show();
+            return app.exec();
+        }
+
+
     }
     else{
         app.newClientProcess(uniqueKey,"close");
