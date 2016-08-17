@@ -29,8 +29,10 @@
 > * 参数 -t,--target是指向应用程序名称，deepin-shortcut-viewer会根据应用程序名称找到对应目录的快捷键文件，比如dde-file-manager，deepin-shortcut-viewer会读取/usr/share/deepin-shortcut-viewer/dde-file-manager/zh_CN/shortcut.txt这个文件，如果当前系统语言是其他语言，deepin-shortcut-viewer会读取对应语言目录的shortcut.txt文件，比如../en_US/shortcut.txt。
 >
 > * 参数-r,--rect是用来暴露你当前程序窗口的位置信息，当加上这个参数暴露当前要居中的窗口坐标信息的时候，deepin-shortcut-viewer会居中到这个窗口，如果不加这个参数，deepin-shortcut-viewer会居中到屏幕。
+>
+> * 参数-j,--json-data是把快捷键内容转换成下面json格式字符串传给deepin-shortcut-viewer读取的一种方式。比起使用-t参数的方式，这个可以在程序中把快捷键内容传给deepin-shortcut-viewer显示，从而不用额外配置快捷键文件。
 
-#### 命令行打开命令事例：
+#### 命令行打开命令事例（使用-t参数的方式）：
 >        deepin-shortcut-viewer -t=dde-file-manager -r=200,200,700,450
 >
 >  应用截图：
@@ -80,7 +82,7 @@ json 数据格式如下：
 
 数据的root为shortcut每个object中,groupName是快捷键分组标签；groupItems是该分组的快捷键；groupItems中,name为快捷键标签，value为快捷键符号。
 
-### 程序实现实例：
+### 程序实现实例（使用-j参数的方式）：
 
 ~~~c++
 #include "widget.h"
@@ -131,3 +133,7 @@ int main(int argc, char *argv[])
 程序截图：
 
 ![应用截图](./preview1.png)
+
+#### 说明：
+
+命令行调用的时候若是-r 和 -j的参数都使用了，deepin-shortcut-viewer会默认启用-r参数格式显示快捷键内容。
