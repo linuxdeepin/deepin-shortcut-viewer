@@ -9,11 +9,15 @@ MainWidget::MainWidget(QWidget *parent) : QDialog(parent)
 MainWidget::MainWidget(QWidget *parent, QString data , int flag): QDialog(parent){
     m_scene = new ShortcutScene(this,data ,flag);
     initUI();
+    setFocus(Qt::MouseFocusReason);
+    grabKeyboard();
 }
 
 void MainWidget::initUI(){
 
-    setWindowFlags(Qt::FramelessWindowHint|Qt::SplashScreen|Qt::Popup|Qt::WindowStaysOnTopHint);
+//    setWindowFlags(Qt::FramelessWindowHint|Qt::SplashScreen|Qt::Popup|Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+
 
     setAttribute(Qt::WA_TranslucentBackground, true);
     resize(maximumSize());
@@ -111,4 +115,21 @@ void MainWidget::paintEvent(QPaintEvent *event){
 void MainWidget::mousePressEvent(QMouseEvent *e){
     qApp->quit();
     QDialog::mousePressEvent(e);
+}
+
+void MainWidget::keyReleaseEvent(QKeyEvent *e)
+{
+    qDebug()<<e;
+    if(e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift){
+        releaseKeyboard();
+        QDialog::keyReleaseEvent(e);
+        qApp->quit();
+    }
+    QDialog::keyReleaseEvent(e);
+}
+
+void MainWidget::focusInEvent(QFocusEvent *e)
+{
+    grabKeyboard();
+    QDialog::focusInEvent(e);
 }

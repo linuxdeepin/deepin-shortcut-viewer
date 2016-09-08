@@ -9,14 +9,14 @@ ShortcutScene::ShortcutScene(QObject *parent)
     :QGraphicsScene(parent)
 {
     initData();
-    setFocus(Qt::MouseFocusReason);
+//    setFocus(Qt::MouseFocusReason);
 }
 ShortcutScene::ShortcutScene(QObject *parent, QString data ,int flag)
     :QGraphicsScene(parent){
     if(flag == 0){
         QString dir = data;
         initData();
-        setFocus(Qt::MouseFocusReason);
+//        setFocus(Qt::MouseFocusReason);
         loadFile(dir);
     }
     else if (flag ==1){
@@ -322,4 +322,3 @@ void ShortcutScene::loadFile(QString file){
     initUI();
     setSceneRect(0,0,this->sceneRect().width(),this->sceneRect().height());
 }
-

@@ -3,9 +3,9 @@
 
 ### deepin-shortcut-viewer特性
 
-1. ##### deepin-shortcut-viewer 是一个单进程应用，当第一次启动后，如果再调用一次，它就会关闭。于此类推来控制显示快捷键预览或者关闭快捷键预览。
+##### 1. deepin-shortcut-viewer 是一个单进程应用.当deepin-shortcut-viewer启动后，在deepin-shortcut-viewer被销毁之前其他应用无法启动deepin-shortcut-viewer。当deepin-shortcut-viewer检测到有control键或者shift键被释放时候，deepin-shortcut-viewer会退出，或者用鼠标点击deepin-shortcut-viewer窗口区域。
 
-2. ##### deepin-shortcut-viewer的窗口大小会根据快捷键内容进行自适应，调用方无需关心deepin-shortcut-viewer的窗口设置。
+##### 2. deepin-shortcut-viewer的窗口大小会根据快捷键内容进行自适应，调用方无需关心deepin-shortcut-viewer的窗口设置。
 
 ![Alt text](./cmd.png)
 

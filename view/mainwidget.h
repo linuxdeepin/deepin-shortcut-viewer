@@ -26,6 +26,8 @@ protected:
     void paintEvent(QPaintEvent*) override;
 
     void mousePressEvent(QMouseEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
+    void focusInEvent(QFocusEvent *e);
 
 private:
     void initUI();

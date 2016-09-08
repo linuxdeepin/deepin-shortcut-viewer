@@ -36,18 +36,25 @@ int main(int argc, char *argv[])
     //Handle singlelentan process communications;
     if(isSingleApplication){
         QString jsonData = cmdManager.jsonData();
+        QPoint pos = cmdManager.pos();
+
+        MainWidget *w;
 
         if(jsonData == "")
             return 0;
-        QPoint pos = cmdManager.pos();
-        MainWidget *w = new MainWidget(0,jsonData ,1);
+
+        w = new MainWidget(0,jsonData ,1);
+
         pos-=QPoint(w->width()/2,w->height()/2);
         w->move(pos);
         w->show();
+        w->activateWindow();
+        w->setFocus();
+
         return app.exec();
     }
     else{
-        app.newClientProcess(uniqueKey,"close");
+//        app.newClientProcess(uniqueKey,"close");
         return 0;
     }
 
