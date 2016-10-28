@@ -16,7 +16,7 @@ MainWidget::MainWidget(QWidget *parent, QString data , int flag): QDialog(parent
 void MainWidget::initUI(){
 
 //    setWindowFlags(Qt::FramelessWindowHint|Qt::SplashScreen|Qt::Popup|Qt::WindowStaysOnTopHint);
-    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint | Qt::SplashScreen);
 
 
     setAttribute(Qt::WA_TranslucentBackground, true);
