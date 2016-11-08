@@ -25,19 +25,20 @@ signals:
 protected:
     void paintEvent(QPaintEvent*) override;
 
-    void mousePressEvent(QMouseEvent *e);
-    void keyReleaseEvent(QKeyEvent *e);
-    void focusInEvent(QFocusEvent *e);
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void focusInEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
+    void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
 private:
     void initUI();
-    QImage              drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
-    void                drawShadowPixmap();
-    QGraphicsView       *m_mainView;
-    QVBoxLayout         *m_mainLayout;
-    ShortcutScene       *m_scene;
-    QPixmap             m_shadowPixmap;
-    int                 m_shadowRadius=20;
+    QImage drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
+    void drawShadowPixmap();
+    QGraphicsView *m_mainView;
+    QVBoxLayout *m_mainLayout;
+    ShortcutScene *m_scene;
+    QPixmap m_shadowPixmap;
+    int m_shadowRadius=20;
 
 };
 

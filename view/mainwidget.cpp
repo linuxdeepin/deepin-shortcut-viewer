@@ -125,11 +125,16 @@ void MainWidget::keyReleaseEvent(QKeyEvent *e)
         QDialog::keyReleaseEvent(e);
         qApp->quit();
     }
-    QDialog::keyReleaseEvent(e);
 }
 
 void MainWidget::focusInEvent(QFocusEvent *e)
 {
     grabKeyboard();
     QDialog::focusInEvent(e);
+}
+
+void MainWidget::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key() == Qt::Key_Escape || e->key() == Qt::Key_Back)
+        qApp->quit();
 }
