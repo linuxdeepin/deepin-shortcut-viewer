@@ -1,0 +1,5 @@
+deepin-shortcut-viewer (1.0-1) unstable; urgency=medium
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Deepin Packages Builder <packages@deepin.com>  Mon, 01 Aug 2016 16:27:54 +0800
