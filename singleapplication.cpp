@@ -1,4 +1,5 @@
 #include "singleapplication.h"
+#include "commandlinemanager.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -27,26 +28,23 @@ void SingleApplication::initConnect()
     connect(m_localServer, &QLocalServer::newConnection, this, &SingleApplication::handleConnection);
 }
 
-void SingleApplication::newClientProcess(const QString &key , QString order)
+void SingleApplication::newClientProcess(const QString &key , const QByteArray &message)
 {
-    qDebug() << "The dde-file-manager is running!";
+    qDebug() << "The deepin-shortcut-viewer is running!";
     QLocalSocket *localSocket = new QLocalSocket;
     localSocket->connectToServer(userServerName(key));
     if (localSocket->waitForConnected(1000)){
         if (localSocket->state() == QLocalSocket::ConnectedState){
             if (localSocket->isValid()){
                 qDebug() << "start write";
-                QJsonObject message;
-                message.insert("order", order);
-                QJsonDocument  obj(message);
-                localSocket->write(obj.toJson().data());
+                localSocket->write(message);
                 localSocket->flush();
             }
         }
     }else{
         qDebug() << localSocket->errorString();
     }
-    qDebug() << "The dde-file-manager is running end!";
+    qDebug() << "The deepin-shortcut-viewer is running end!";
 }
 
 QString SingleApplication::userServerName(const QString &key)
@@ -71,7 +69,30 @@ QString SingleApplication::userID()
     return UserID;
 }
 
+void SingleApplication::processArgs(const QStringList &list)
+{
+    //Command manager
+    CommandLineManager cmdManager;
+    cmdManager.process(list);
 
+    QString jsonData = cmdManager.jsonData();
+    QPoint pos = cmdManager.pos();
+
+    static MainWidget *w = Q_NULLPTR;
+
+    if (jsonData == "")
+        return;
+
+    if (!w)
+        w = new MainWidget();
+
+    w->setJsonData(jsonData, 1);
+    pos -= QPoint(w->width() / 2,w->height() / 2);
+    w->move(pos);
+    w->show();
+    w->activateWindow();
+    w->setFocus();
+}
 
 bool SingleApplication::setSingleInstance(const QString &key)
 {
@@ -103,15 +124,13 @@ void SingleApplication::handleConnection()
 
 void SingleApplication::readData()
 {
-    qDebug() << sender();
-    qDebug() << static_cast<QLocalSocket*>(sender())->bytesAvailable();
+    const QByteArray &message = qobject_cast<QLocalSocket*>(sender())->readAll();
 
-    QJsonParseError* error = new QJsonParseError();
-    QJsonObject messageObj = QJsonDocument::fromJson(QByteArray(static_cast<QLocalSocket*>(sender())->readAll()), error).object();
-    qDebug() << messageObj << error->errorString();
-    qDebug()<<"message order is:"<<messageObj["order"];
+    QStringList list;
 
-    if(messageObj["order"].toString()=="close")
-        qApp->quit();
+    for (const QByteArray &data : message.split('\0'))
+        list << QString::fromLocal8Bit(data);
+
+    processArgs(list);
 }
 

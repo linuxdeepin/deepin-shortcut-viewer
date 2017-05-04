@@ -4,37 +4,36 @@
 MainWidget::MainWidget(QWidget *parent) : QDialog(parent)
 {
     initUI();
-    m_scene = new ShortcutScene(this);
 }
-MainWidget::MainWidget(QWidget *parent, QString data , int flag): QDialog(parent){
-    m_scene = new ShortcutScene(this,data ,flag);
-    initUI();
-    setFocus(Qt::MouseFocusReason);
-    grabKeyboard();
+
+void MainWidget::setJsonData(const QString &data, int flag)
+{
+    if (m_scene)
+        m_scene->deleteLater();
+
+    m_scene = new ShortcutScene(this, data, flag);
+    m_mainView->setScene(m_scene);
+    m_mainView->resize(m_scene->sceneRect().width()+88,m_scene->sceneRect().height()+80);
+    this->resize(m_mainView->size().width()+CONTENT_MARGINS*2,m_mainView->size().height()+CONTENT_MARGINS*2);
+    drawShadowPixmap();
 }
 
 void MainWidget::initUI(){
 
 //    setWindowFlags(Qt::FramelessWindowHint|Qt::SplashScreen|Qt::Popup|Qt::WindowStaysOnTopHint);
     setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint | Qt::SplashScreen);
-
-
     setAttribute(Qt::WA_TranslucentBackground, true);
-    resize(maximumSize());
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
     m_mainView = new QGraphicsView(this);
 
     m_mainView->setObjectName("MainView");
-    m_mainView->resize(size());
     m_mainLayout->addWidget(m_mainView);
 
 //    m_scene=new ShortcutScene(this);
 //    m_scene->loadFile(m_url);
-    m_mainView->setScene(m_scene);
-    m_mainView->resize(m_scene->sceneRect().width()+88,m_scene->sceneRect().height()+80);
-    this->resize(m_mainView->size().width()+CONTENT_MARGINS*2,m_mainView->size().height()+CONTENT_MARGINS*2);
+
     setLayout(m_mainLayout);
     this->setStyleSheet("QGraphicsView#MainView{"
                             "background:rgba(0,0,0,0.7);"
@@ -42,7 +41,6 @@ void MainWidget::initUI(){
 //                            "border: 2px solid rgba(255,255,255,0.15);"
                         "}");
     setContentsMargins(CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS);
-    drawShadowPixmap();
 }
 
 
@@ -113,7 +111,7 @@ void MainWidget::paintEvent(QPaintEvent *event){
 }
 
 void MainWidget::mousePressEvent(QMouseEvent *e){
-    qApp->quit();
+    hide();
     QDialog::mousePressEvent(e);
 }
 
@@ -123,7 +121,7 @@ void MainWidget::keyReleaseEvent(QKeyEvent *e)
     if(e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift){
         releaseKeyboard();
         QDialog::keyReleaseEvent(e);
-        qApp->quit();
+        hide();
     }
 }
 
@@ -136,5 +134,13 @@ void MainWidget::focusInEvent(QFocusEvent *e)
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
     if(e->key() == Qt::Key_Escape || e->key() == Qt::Key_Back)
-        qApp->quit();
+        hide();
+}
+
+void MainWidget::showEvent(QShowEvent *e)
+{
+    QDialog::showEvent(e);
+
+    setFocus(Qt::MouseFocusReason);
+    grabKeyboard();
 }

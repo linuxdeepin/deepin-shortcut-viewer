@@ -8,7 +8,8 @@ class CommandLineManager
 {
 public:
     CommandLineManager();
-    void process(QApplication &app);
+    void process(const QCoreApplication &app);
+    void process(const QStringList &list);
     QPoint pos();
     QString jsonData();
 private:

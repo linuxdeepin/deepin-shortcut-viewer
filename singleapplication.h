@@ -15,12 +15,12 @@ public:
     ~SingleApplication();
     void initConnect();
 
-    void newClientProcess(const QString& key,QString order);
+    void newClientProcess(const QString& key, const QByteArray &message);
     static QString userServerName(const QString& key);
     static QString userID();
     static QString UserID;
 
-signals:
+    static void processArgs(const QStringList &list);
 
 public slots:
     bool setSingleInstance(const QString& key);

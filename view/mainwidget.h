@@ -18,9 +18,8 @@ class MainWidget : public QDialog
     Q_OBJECT
 public:
      MainWidget(QWidget *parent = 0);
-     MainWidget(QWidget *parent = 0 ,QString data = "" ,int flag = 0);
 
-signals:
+    void setJsonData(const QString &data, int flag = 0);
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -30,13 +29,16 @@ protected:
     void focusInEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
+protected:
+    void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+
 private:
     void initUI();
     QImage drawShadow(const QPixmap &px, qreal radius, const QColor &color = Qt::black, QSize size = QSize());
     void drawShadowPixmap();
     QGraphicsView *m_mainView;
     QVBoxLayout *m_mainLayout;
-    ShortcutScene *m_scene;
+    ShortcutScene *m_scene = Q_NULLPTR;
     QPixmap m_shadowPixmap;
     int m_shadowRadius=20;
 

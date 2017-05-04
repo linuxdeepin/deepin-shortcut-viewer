@@ -17,8 +17,14 @@ CommandLineManager::CommandLineManager():
     m_commandLineParser.addOption(m_posOption);
     m_commandLineParser.addOption(m_jsonDataOption);
 }
-void CommandLineManager::process(QApplication &app){
+void CommandLineManager::process(const QCoreApplication &app)
+{
     m_commandLineParser.process(app);
+}
+
+void CommandLineManager::process(const QStringList &list)
+{
+    m_commandLineParser.process(list);
 }
 
 QString CommandLineManager::jsonData(){
