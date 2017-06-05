@@ -4,10 +4,12 @@
 #include <QApplication>
 #include <QLocalServer>
 #include <QLocalSocket>
-#include <commandlinemanager.h>
-#include "./view/mainwidget.h"
 
-class SingleApplication : public QApplication
+#include <DApplication>
+
+DWIDGET_USE_NAMESPACE
+
+class SingleApplication : public DApplication
 {
     Q_OBJECT
 public:

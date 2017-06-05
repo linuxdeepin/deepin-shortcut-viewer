@@ -16,6 +16,7 @@ CommandLineManager::CommandLineManager():
     m_commandLineParser.addVersionOption();
     m_commandLineParser.addOption(m_posOption);
     m_commandLineParser.addOption(m_jsonDataOption);
+    m_commandLineParser.addOption(QCommandLineOption(QStringList() << "b" << "bypass", "Enable bypass window manager hint"));
 }
 void CommandLineManager::process(const QCoreApplication &app)
 {
@@ -29,6 +30,11 @@ void CommandLineManager::process(const QStringList &list)
 
 QString CommandLineManager::jsonData(){
     return m_commandLineParser.value(m_jsonDataOption);
+}
+
+bool CommandLineManager::enableBypassWindowManagerHint() const
+{
+    return m_commandLineParser.isSet("b");
 }
 
 QPoint CommandLineManager::pos(){

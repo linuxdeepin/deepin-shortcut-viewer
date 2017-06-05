@@ -12,6 +12,9 @@ public:
     void process(const QStringList &list);
     QPoint pos();
     QString jsonData();
+
+    bool enableBypassWindowManagerHint() const;
+
 private:
     QCommandLineParser m_commandLineParser;
     QCommandLineOption m_posOption;

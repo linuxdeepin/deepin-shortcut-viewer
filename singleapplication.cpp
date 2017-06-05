@@ -1,5 +1,6 @@
 #include "singleapplication.h"
 #include "commandlinemanager.h"
+#include "view/mainwidget.h"
 
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -8,7 +9,7 @@
 
 QString SingleApplication::UserID = "1000";
 
-SingleApplication::SingleApplication(int &argc, char **argv, int): QApplication(argc, argv)
+SingleApplication::SingleApplication(int &argc, char **argv, int): DApplication(argc, argv)
 {
     m_localServer = new QLocalServer;
     initConnect();
@@ -88,8 +89,12 @@ void SingleApplication::processArgs(const QStringList &list)
 
     w->setJsonData(jsonData, 1);
     pos -= QPoint(w->width() / 2,w->height() / 2);
-    w->move(pos);
+
+    if (cmdManager.enableBypassWindowManagerHint())
+        w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
+
     w->show();
+    w->move(pos);
     w->activateWindow();
     w->setFocus();
 }

@@ -16,6 +16,7 @@
 int main(int argc, char *argv[])
 {
     //Singlentan process
+    SingleApplication::loadDXcbPlugin();
     SingleApplication app(argc,argv);
     app.setQuitOnLastWindowClosed(false);
 
