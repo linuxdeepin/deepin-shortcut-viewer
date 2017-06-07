@@ -84,6 +84,11 @@ void SingleApplication::processArgs(const QStringList &list)
     if (jsonData == "")
         return;
 
+    if (w && cmdManager.enableBypassWindowManagerHint()) {
+        w->deleteLater();
+        w = Q_NULLPTR;
+    }
+
     if (!w)
         w = new MainWidget();
 
