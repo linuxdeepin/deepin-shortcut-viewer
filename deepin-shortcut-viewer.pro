@@ -8,9 +8,8 @@ QT       += core gui core network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-include(cutelogger/cutelogger.pri)
 CONFIG += c++11 link_pkgconfig
-PKGCONFIG += dtkwidget
+PKGCONFIG += dtkwidget dtkcore
 
 DEFINES += QT_MESSAGELOGCONTEXT
 

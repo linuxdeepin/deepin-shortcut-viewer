@@ -14,8 +14,7 @@
  */
 
 #include <QApplication>
-#include "logmanager.h"
-#include "Logger.h"
+#include <DLog>
 //#include "widget.h"
 #include "./view/mainwidget.h"
 #include <QRect>
@@ -27,6 +26,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 
+DCORE_USE_NAMESPACE
+
 int main(int argc, char *argv[])
 {
     //Singlentan process
@@ -35,13 +36,11 @@ int main(int argc, char *argv[])
     app.setQuitOnLastWindowClosed(false);
 
     //Logger handle
-    LogManager::instance()->debug_log_console_on();
+    DLogManager::registerConsoleAppender();
 
     app.setOrganizationName("deepin");
     app.setApplicationName(QObject::tr("Deepin Shortcut Viewer"));
     app.setApplicationVersion("v1.0");
-
-
 
     QString uniqueKey = app.applicationName();
     bool isSingleApplication = app.setSingleInstance(uniqueKey);
