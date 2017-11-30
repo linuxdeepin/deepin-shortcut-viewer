@@ -20,10 +20,10 @@
 #include <QDebug>
 CommandLineManager::CommandLineManager():
     m_posOption(QStringList()<<"p"<<"pos",
-                 QCoreApplication::translate("main","Expose your  window's central position(x,y) info where the deepin-shorcut-viwer can be center int your window relativly,otherwise it will be center in the current screen. eg: -p=100,50 or --pos=900,50"),
+                 QCoreApplication::translate("main","Expose your window's central position(x,y) info where the deepin-shorcut-viwer can be center int your window relatively, otherwise it will be center in the current screen. eg: -p=100,50 or --pos=900,50"),
                  " "),
     m_jsonDataOption(QStringList()<<"j"<<"json-data",
-                     QCoreApplication::translate("main","Directly convert a json data to this program ,see https://github.com/tommego/deepin-shortcut-viewer  for more information of this decscription"),
+                     QCoreApplication::translate("main","Directly convert a json data to this program. See https://github.com/linuxdeepin/deepin-shortcut-viewer or docs provided with the program for more information of this decscription"),
                      " ")
 {
     m_commandLineParser.setApplicationDescription("Test helper");
