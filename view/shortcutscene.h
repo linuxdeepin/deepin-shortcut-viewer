@@ -1,4 +1,11 @@
 /*
+ * Copyright (C) 2016 ~ 2018 Deepin Technology Co., Ltd.
+ *
+ * Author:     dragondjf<dingjiangfeng@deepin.com>
+ *
+ * Maintainer: dragondjf<dingjiangfeng@deepin.com>
+ *             Tangtong<tangtong@deepin.com>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
