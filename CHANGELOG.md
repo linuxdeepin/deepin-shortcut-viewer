@@ -1,3 +1,13 @@
+<a name="1.3.5"></a>
+## 1.3.5 (2018-05-14)
+
+
+#### Bug Fixes
+
+*   register log after app settings ([d36c2db8](https://github.com/linuxdeepin/deepin-shortcut-viewer/commit/d36c2db87eb8e11ae32c8eb8f9672f25707f7512))
+
+
+
 <a name="">1.3.4</a>
 ##  (2018-02-06)
 
