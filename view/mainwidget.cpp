@@ -25,7 +25,8 @@
 #include <DPlatformWindowHandle>
 #include <DApplication>
 
-MainWidget::MainWidget(QWidget *parent) : DAbstractDialog(parent)
+MainWidget::MainWidget(QWidget *parent)
+    : DAbstractDialog(false, parent)
 {
     initUI();
 }
@@ -43,7 +44,8 @@ void MainWidget::setJsonData(const QString &data, int flag)
 
 void MainWidget::initUI(){
 
-    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
+    setWindowFlag(Qt::WindowStaysOnTopHint);
+    setAttribute(Qt::WA_TranslucentBackground);
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
@@ -59,7 +61,6 @@ void MainWidget::initUI(){
 
     setLayout(m_mainLayout);
     setContentsMargins(CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS);
-    setBackgroundColor(QColor(0, 0, 0, 255 * 0.7));
 
     if (DApplication::isDXcbPlatform()) {
         DPlatformWindowHandle handle(this);
@@ -101,4 +102,11 @@ void MainWidget::showEvent(QShowEvent *e)
 
     setFocus(Qt::MouseFocusReason);
     grabKeyboard();
+}
+
+void MainWidget::paintEvent(QPaintEvent *e)
+{
+    Q_UNUSED(e)
+    QPainter pa(this);
+    pa.fillRect(rect(), QColor(0, 0, 0, 255 * 0.7));
 }

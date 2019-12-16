@@ -55,6 +55,7 @@ protected:
 
 protected:
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) override;
 
 private:
     void initUI();
