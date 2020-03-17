@@ -43,13 +43,13 @@ class MainWidget : public DAbstractDialog
 {
     Q_OBJECT
 public:
-     MainWidget(QWidget *parent = 0);
+    MainWidget(QWidget *parent = 0);
 
     void setJsonData(const QString &data, int flag = 0);
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-    void keyReleaseEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+//    void keyReleaseEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void focusInEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 

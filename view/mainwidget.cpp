@@ -38,11 +38,12 @@ void MainWidget::setJsonData(const QString &data, int flag)
 
     m_scene = new ShortcutScene(this, data, flag);
     m_mainView->setScene(m_scene);
-    m_mainView->resize(m_scene->sceneRect().width()+88,m_scene->sceneRect().height()+80);
-    setFixedSize(m_mainView->size().width()+CONTENT_MARGINS*2,m_mainView->size().height()+CONTENT_MARGINS*2);
+    m_mainView->resize(m_scene->sceneRect().width() + 88, m_scene->sceneRect().height() + 80);
+    setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
 }
 
-void MainWidget::initUI(){
+void MainWidget::initUI()
+{
 
     setWindowFlag(Qt::WindowStaysOnTopHint);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -60,7 +61,7 @@ void MainWidget::initUI(){
 //    m_scene->loadFile(m_url);
 
     setLayout(m_mainLayout);
-    setContentsMargins(CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS,CONTENT_MARGINS);
+    setContentsMargins(CONTENT_MARGINS, CONTENT_MARGINS, CONTENT_MARGINS, CONTENT_MARGINS);
 
     if (DApplication::isDXcbPlatform()) {
         DPlatformWindowHandle handle(this);
@@ -70,19 +71,20 @@ void MainWidget::initUI(){
     }
 }
 
-void MainWidget::mousePressEvent(QMouseEvent *e){
+void MainWidget::mousePressEvent(QMouseEvent *e)
+{
     hide();
     DAbstractDialog::mousePressEvent(e);
 }
 
-void MainWidget::keyReleaseEvent(QKeyEvent *e)
-{
-    if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
-        releaseKeyboard();
-        DAbstractDialog::keyReleaseEvent(e);
-        hide();
-    }
-}
+//void MainWidget::keyReleaseEvent(QKeyEvent *e)
+//{
+////    if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
+////        releaseKeyboard();
+////        DAbstractDialog::keyReleaseEvent(e);
+////        hide();
+////    }
+//}
 
 void MainWidget::focusInEvent(QFocusEvent *e)
 {
@@ -92,7 +94,7 @@ void MainWidget::focusInEvent(QFocusEvent *e)
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
-    if(e->key() == Qt::Key_Escape || e->key() == Qt::Key_Back)
+    if (e->key() == Qt::Key_Escape || e->key() == Qt::Key_Back)
         hide();
 }
 
