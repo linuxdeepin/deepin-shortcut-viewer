@@ -25,6 +25,8 @@
 #include <DPlatformWindowHandle>
 #include <DApplication>
 
+#include <QProcessEnvironment>
+
 MainWidget::MainWidget(QWidget *parent)
     : DAbstractDialog(false, parent)
 {
@@ -36,10 +38,23 @@ void MainWidget::setJsonData(const QString &data, int flag)
     if (m_scene)
         m_scene->deleteLater();
 
+    auto e = QProcessEnvironment::systemEnvironment();
+    QString str_output = e.value(QStringLiteral("LANG"));
+
     m_scene = new ShortcutScene(this, data, flag);
     m_mainView->setScene(m_scene);
-    m_mainView->resize(m_scene->sceneRect().width() + 88, m_scene->sceneRect().height() + 80);
-    setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
+
+    if (str_output == "zh_CN.UTF-8") {
+        m_mainView->resize(m_scene->sceneRect().width() + 88, m_scene->sceneRect().height() + 80);
+        setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
+    }
+
+    else {
+        m_mainView->resize(m_scene->sceneRect().width() + 44, m_scene->sceneRect().height() + 40);
+        setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
+    }
+
+
 }
 
 void MainWidget::initUI()
