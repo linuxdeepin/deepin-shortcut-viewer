@@ -122,7 +122,7 @@ void SingleApplication::processArgs(const QStringList &list)
 
     w->show();
     w->move(pos);
-    w->activateWindow();
+    //w->activateWindow();
     w->setFocus();
 }
 
