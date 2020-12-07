@@ -188,7 +188,7 @@ void ShortcutScene::initUI()
 
             nametextItem->setPlainText(data.name);
             nametextItem->setDefaultTextColor(Qt::white);
-            valueTextItem->setDefaultTextColor(QColor(255, 255, 255, 0.8 * 255));
+            valueTextItem->setDefaultTextColor(QColor(255, 255, 255, static_cast<int>(0.8 * 255)));
             addItem(nametextItem);
             addItem(valueTextItem);
             m_listTextItems[i * 2]->append(nametextItem);
@@ -217,7 +217,7 @@ void ShortcutScene::initUI()
         int index = 0;
         foreach (QGraphicsTextItem *item, *m_listTextItems[a]) {
             int x = m_cols[a].x;
-            int y = m_displayShortcutLists[(int)a / 2 * 1]->at(index).y;
+            int y = m_displayShortcutLists[static_cast<int>(a / 2 * 1)]->at(index).y;
             item->setPos(x, y);
             index++;
         }
@@ -228,8 +228,8 @@ void ShortcutScene::initUI()
 }
 void ShortcutScene::initData()
 {
-    m_maxContentHeigth = qApp->desktop()->height() * 0.8;
-    m_maxContentWidth = qApp->desktop()->width() * 0.8 - 150;
+    m_maxContentHeigth = static_cast<int>(qApp->desktop()->height() * 0.8);
+    m_maxContentWidth = static_cast<int>(qApp->desktop()->width() * 0.8 - 150);
 
     m_displayShortcutLists[0] = new QList<Shortcut>();
     m_displayShortcutLists[1] = new QList<Shortcut>();
@@ -240,7 +240,7 @@ void ShortcutScene::initData()
 void ShortcutScene::sortData()
 {
     int offset = m_shortcutList.count() % 3;
-    int average = (int)m_shortcutList.count() / 3;
+    int average = static_cast<int>(m_shortcutList.count() / 3);
 
     int i = 0;
     int colLsength[3] = {0, 0, 0};

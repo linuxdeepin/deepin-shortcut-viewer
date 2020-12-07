@@ -45,16 +45,14 @@ void MainWidget::setJsonData(const QString &data, int flag)
     m_mainView->setScene(m_scene);
 
     if (str_output == "zh_CN.UTF-8") {
-        m_mainView->resize(m_scene->sceneRect().width() + 88, m_scene->sceneRect().height() + 80);
+        m_mainView->resize(static_cast<int>(m_scene->sceneRect().width() + 88), static_cast<int>(m_scene->sceneRect().height() + 80));
         setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
     }
 
     else {
-        m_mainView->resize(m_scene->sceneRect().width() + 44, m_scene->sceneRect().height() + 40);
+        m_mainView->resize(static_cast<int>(m_scene->sceneRect().width() + 44), static_cast<int>(m_scene->sceneRect().height() + 40));
         setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
     }
-
-
 }
 
 void MainWidget::initUI()
@@ -68,7 +66,7 @@ void MainWidget::initUI()
     m_mainView = new QGraphicsView(this);
 
     m_mainView->setStyleSheet("background: transparent;");
-    m_mainView->setFrameShape(QFrame::NoFrame);
+    setWindowFlag(Qt::FramelessWindowHint);
     m_mainView->setObjectName("MainView");
     m_mainLayout->addWidget(m_mainView);
 
@@ -82,7 +80,7 @@ void MainWidget::initUI()
         DPlatformWindowHandle handle(this);
 
         handle.setBorderWidth(2);
-        handle.setBorderColor(QColor(255, 255, 255, 255 * 0.15));
+        handle.setBorderColor(QColor(255, 255, 255, static_cast<int>(255 * 0.15)));
     }
 }
 
@@ -125,5 +123,5 @@ void MainWidget::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e)
     QPainter pa(this);
-    pa.fillRect(rect(), QColor(0, 0, 0, 255 * 0.7));
+    pa.fillRect(rect(), QColor(0, 0, 0, static_cast<int>(255 * 0.7)));
 }
