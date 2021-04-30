@@ -26,10 +26,15 @@
 #include <DApplication>
 
 #include <QProcessEnvironment>
+#include <QTimer>
 
 MainWidget::MainWidget(QWidget *parent)
     : DAbstractDialog(false, parent)
 {
+    m_checkTimer = new QTimer(this);
+    m_checkTimer->setInterval(500);
+    connect(m_checkTimer, &QTimer::timeout, this, &MainWidget::checkKeyboard);
+
     initUI();
 }
 
@@ -53,6 +58,11 @@ void MainWidget::setJsonData(const QString &data, int flag)
         m_mainView->resize(static_cast<int>(m_scene->sceneRect().width() + 44), static_cast<int>(m_scene->sceneRect().height() + 40));
         setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
     }
+}
+
+void MainWidget::startCheckKeyboard()
+{
+    m_checkTimer->start();
 }
 
 void MainWidget::initUI()
@@ -84,20 +94,26 @@ void MainWidget::initUI()
     }
 }
 
+void MainWidget::checkKeyboard()
+{
+    if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier))
+        hide();
+}
+
 void MainWidget::mousePressEvent(QMouseEvent *e)
 {
     hide();
     DAbstractDialog::mousePressEvent(e);
 }
 
-//void MainWidget::keyReleaseEvent(QKeyEvent *e)
-//{
-////    if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
-////        releaseKeyboard();
-////        DAbstractDialog::keyReleaseEvent(e);
-////        hide();
-////    }
-//}
+void MainWidget::keyReleaseEvent(QKeyEvent *e)
+{
+    if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
+        releaseKeyboard();
+        DAbstractDialog::keyReleaseEvent(e);
+        hide();
+    }
+}
 
 void MainWidget::focusInEvent(QFocusEvent *e)
 {
@@ -117,6 +133,13 @@ void MainWidget::showEvent(QShowEvent *e)
 
     setFocus(Qt::MouseFocusReason);
     grabKeyboard();
+}
+
+void MainWidget::hideEvent(QHideEvent *e)
+{
+    m_checkTimer->stop();
+
+    DAbstractDialog::hideEvent(e);
 }
 
 void MainWidget::paintEvent(QPaintEvent *e)

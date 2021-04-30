@@ -37,6 +37,7 @@
 #include <QDialog>
 #define CONTENT_MARGINS 0
 
+class QTimer;
 DWIDGET_USE_NAMESPACE
 
 class MainWidget : public DAbstractDialog
@@ -47,14 +48,20 @@ public:
 
     void setJsonData(const QString &data, int flag = 0);
 
+    void startCheckKeyboard();
+
+public slots:
+    void checkKeyboard();
+
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
-//    void keyReleaseEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
     void focusInEvent(QFocusEvent *e) Q_DECL_OVERRIDE;
     void keyPressEvent(QKeyEvent *e) Q_DECL_OVERRIDE;
 
 protected:
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
+    void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;
 
 private:
@@ -63,6 +70,7 @@ private:
     QGraphicsView *m_mainView;
     QVBoxLayout *m_mainLayout;
     ShortcutScene *m_scene = Q_NULLPTR;
+    QTimer *m_checkTimer = nullptr;
 };
 
 #endif // MAINWIDGET_H
