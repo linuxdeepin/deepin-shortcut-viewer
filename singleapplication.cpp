@@ -121,7 +121,6 @@ void SingleApplication::processArgs(const QStringList &list)
         w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
 
     w->show();
-    w->startCheckKeyboard();
     w->move(pos);
     //w->activateWindow();
     w->setFocus();

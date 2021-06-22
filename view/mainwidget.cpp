@@ -31,10 +31,6 @@
 MainWidget::MainWidget(QWidget *parent)
     : DAbstractDialog(false, parent)
 {
-    m_checkTimer = new QTimer(this);
-    m_checkTimer->setInterval(500);
-    connect(m_checkTimer, &QTimer::timeout, this, &MainWidget::checkKeyboard);
-
     initUI();
 }
 
@@ -58,11 +54,6 @@ void MainWidget::setJsonData(const QString &data, int flag)
         m_mainView->resize(static_cast<int>(m_scene->sceneRect().width() + 44), static_cast<int>(m_scene->sceneRect().height() + 40));
         setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
     }
-}
-
-void MainWidget::startCheckKeyboard()
-{
-    m_checkTimer->start();
 }
 
 void MainWidget::initUI()
@@ -92,12 +83,6 @@ void MainWidget::initUI()
         handle.setBorderWidth(2);
         handle.setBorderColor(QColor(255, 255, 255, static_cast<int>(255 * 0.15)));
     }
-}
-
-void MainWidget::checkKeyboard()
-{
-    if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier))
-        hide();
 }
 
 void MainWidget::mousePressEvent(QMouseEvent *e)
@@ -133,12 +118,15 @@ void MainWidget::showEvent(QShowEvent *e)
 
     setFocus(Qt::MouseFocusReason);
     grabKeyboard();
+
+    QTimer::singleShot(500, this, [this](){
+        if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier))
+            hide();
+    });
 }
 
 void MainWidget::hideEvent(QHideEvent *e)
 {
-    m_checkTimer->stop();
-
     DAbstractDialog::hideEvent(e);
 }
 

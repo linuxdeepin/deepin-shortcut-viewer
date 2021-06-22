@@ -37,21 +37,15 @@
 #include <QDialog>
 #define CONTENT_MARGINS 0
 
-class QTimer;
 DWIDGET_USE_NAMESPACE
 
 class MainWidget : public DAbstractDialog
 {
     Q_OBJECT
 public:
-    MainWidget(QWidget *parent = 0);
+    MainWidget(QWidget *parent = nullptr);
 
     void setJsonData(const QString &data, int flag = 0);
-
-    void startCheckKeyboard();
-
-public slots:
-    void checkKeyboard();
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -70,7 +64,6 @@ private:
     QGraphicsView *m_mainView;
     QVBoxLayout *m_mainLayout;
     ShortcutScene *m_scene = Q_NULLPTR;
-    QTimer *m_checkTimer = nullptr;
 };
 
 #endif // MAINWIDGET_H
