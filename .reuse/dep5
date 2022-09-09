@@ -19,8 +19,8 @@ Files: README.md doc/README.md CHANGELOG.md README.zh_CN.md
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC-BY-4.0
 
-# xml toml json conf yaml
-Files:  *.toml *.json
+# xml toml json conf yml
+Files:  *.toml *.json .github/workflows/*.yml
 Copyright: None
 License: CC0-1.0
 
