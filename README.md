@@ -22,4 +22,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-deepin-shortcut-viewer is licensed under [GPL-3.0-or-later] [CC-BY-4.0] [CC0-1.0] [LGPL-3.0-or-later]
+deepin-shortcut-viewer is licensed under [GPL-3.0-or-later]
