@@ -20,4 +20,4 @@ deepin-shortcut-viewer 是一个单进程应用.当deepin-shortcut-viewer启动�
 
 ## 开源许可证
 
-deepin-shortcut-viewer 在 [GPL-3.0-or-later] [CC-BY-4.0] [CC0-1.0] [LGPL-3.0-or-later]下发布。
+deepin-shortcut-viewer 在 [GPL-3.0-or-later]下发布。
