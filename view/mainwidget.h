@@ -5,29 +5,21 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <dabstractdialog.h>
-
-#include <QWidget>
-#include <QDebug>
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QGraphicsView>
+#include <DBlurEffectWidget>
 #include <QVBoxLayout>
-#include "shortcutscene.h"
-#include <QPixmap>
-#include <QImage>
-#include <QDialog>
-#define CONTENT_MARGINS 0
+
+#define CONTENT_MARGINS 30
 
 DWIDGET_USE_NAMESPACE
 
-class MainWidget : public DAbstractDialog
+class ShortcutView;
+class MainWidget : public DBlurEffectWidget
 {
     Q_OBJECT
 public:
     MainWidget(QWidget *parent = nullptr);
 
-    void setJsonData(const QString &data, int flag = 0);
+    void setJsonData(const QString &data);
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -43,9 +35,8 @@ protected:
 private:
     void initUI();
 
-    QGraphicsView *m_mainView;
-    QVBoxLayout *m_mainLayout;
-    ShortcutScene *m_scene = Q_NULLPTR;
+    ShortcutView *m_mainView = nullptr;
+    QVBoxLayout *m_mainLayout = nullptr;
 };
 
 #endif // MAINWIDGET_H
