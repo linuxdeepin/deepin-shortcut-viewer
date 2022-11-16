@@ -3,61 +3,50 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "mainwidget.h"
+#include "shortcutview.h"
 
 #include <DPlatformWindowHandle>
 #include <DApplication>
+#include <DGuiApplicationHelper>
 
 #include <QProcessEnvironment>
 #include <QTimer>
+#include <QPainter>
+#include <QPalette>
+#include <QKeyEvent>
 
 MainWidget::MainWidget(QWidget *parent)
-    : DAbstractDialog(false, parent)
+    : DBlurEffectWidget(parent)
 {
     initUI();
 }
 
-void MainWidget::setJsonData(const QString &data, int flag)
+void MainWidget::setJsonData(const QString &data)
 {
-    if (m_scene)
-        m_scene->deleteLater();
-
-    auto e = QProcessEnvironment::systemEnvironment();
-    QString str_output = e.value(QStringLiteral("LANG"));
-
-    m_scene = new ShortcutScene(this, data, flag);
-    m_mainView->setScene(m_scene);
-
-    if (str_output == "zh_CN.UTF-8") {
-        m_mainView->resize(static_cast<int>(m_scene->sceneRect().width() + 88), static_cast<int>(m_scene->sceneRect().height() + 80));
-        setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
+    if (m_mainView) {
+        m_mainLayout->removeWidget(m_mainView);
+        m_mainView->deleteLater();
     }
 
-    else {
-        m_mainView->resize(static_cast<int>(m_scene->sceneRect().width() + 44), static_cast<int>(m_scene->sceneRect().height() + 40));
-        setFixedSize(m_mainView->size().width() + CONTENT_MARGINS * 2, m_mainView->size().height() + CONTENT_MARGINS * 2);
-    }
+    m_mainView = new ShortcutView(this);
+    m_mainView->setObjectName("MainView");
+    m_mainLayout->addWidget(m_mainView);
+    m_mainView->setData(data);
+    adjustSize();
 }
 
 void MainWidget::initUI()
 {
-
-    setWindowFlag(Qt::WindowStaysOnTopHint);
-    setAttribute(Qt::WA_TranslucentBackground);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog);
+    if (qApp->platformName() == "wayland")
+        setWindowFlag(Qt::FramelessWindowHint);
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
-    m_mainView = new QGraphicsView(this);
-
-    m_mainView->setStyleSheet("background: transparent;");
-    setWindowFlag(Qt::FramelessWindowHint);
-    m_mainView->setObjectName("MainView");
-    m_mainLayout->addWidget(m_mainView);
-
-//    m_scene=new ShortcutScene(this);
-//    m_scene->loadFile(m_url);
 
     setLayout(m_mainLayout);
     setContentsMargins(CONTENT_MARGINS, CONTENT_MARGINS, CONTENT_MARGINS, CONTENT_MARGINS);
+    setBlendMode(DBlurEffectWidget::BehindWindowBlend);
 
     if (DApplication::isDXcbPlatform()) {
         DPlatformWindowHandle handle(this);
@@ -70,14 +59,14 @@ void MainWidget::initUI()
 void MainWidget::mousePressEvent(QMouseEvent *e)
 {
     hide();
-    DAbstractDialog::mousePressEvent(e);
+    DBlurEffectWidget::mousePressEvent(e);
 }
 
 void MainWidget::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
         releaseKeyboard();
-        DAbstractDialog::keyReleaseEvent(e);
+        DBlurEffectWidget::keyReleaseEvent(e);
         hide();
     }
 }
@@ -85,7 +74,7 @@ void MainWidget::keyReleaseEvent(QKeyEvent *e)
 void MainWidget::focusInEvent(QFocusEvent *e)
 {
     grabKeyboard();
-    DAbstractDialog::focusInEvent(e);
+    DBlurEffectWidget::focusInEvent(e);
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
@@ -96,12 +85,12 @@ void MainWidget::keyPressEvent(QKeyEvent *e)
 
 void MainWidget::showEvent(QShowEvent *e)
 {
-    DAbstractDialog::showEvent(e);
+    DBlurEffectWidget::showEvent(e);
 
     setFocus(Qt::MouseFocusReason);
     grabKeyboard();
 
-    QTimer::singleShot(500, this, [this](){
+    QTimer::singleShot(500, this, [this]() {
         if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier))
             hide();
     });
@@ -109,12 +98,10 @@ void MainWidget::showEvent(QShowEvent *e)
 
 void MainWidget::hideEvent(QHideEvent *e)
 {
-    DAbstractDialog::hideEvent(e);
+    DBlurEffectWidget::hideEvent(e);
 }
 
 void MainWidget::paintEvent(QPaintEvent *e)
 {
-    Q_UNUSED(e)
-    QPainter pa(this);
-    pa.fillRect(rect(), QColor(0, 0, 0, static_cast<int>(255 * 0.7)));
+    DBlurEffectWidget::paintEvent(e);
 }

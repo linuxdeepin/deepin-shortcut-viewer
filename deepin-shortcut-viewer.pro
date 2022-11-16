@@ -22,16 +22,18 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    view/shortcutscene.cpp \
     view/mainwidget.cpp \
     commandlinemanager.cpp \
-    singleapplication.cpp
+    singleapplication.cpp \
+    view/shortcutitem.cpp \
+    view/shortcutview.cpp
 
 HEADERS  += \
-    view/shortcutscene.h \
     view/mainwidget.h \
     commandlinemanager.h \
-    singleapplication.h
+    singleapplication.h \
+    view/shortcutitem.h \
+    view/shortcutview.h
 
 
 SUBDIRS += \

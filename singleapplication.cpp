@@ -96,7 +96,7 @@ void SingleApplication::processArgs(const QStringList &list)
     if (!w)
         w = new MainWidget();
 
-    w->setJsonData(jsonData, 1);
+    w->setJsonData(jsonData);
     pos -= QPoint(w->width() / 2,w->height() / 2);
 
     if (cmdManager.enableBypassWindowManagerHint())
