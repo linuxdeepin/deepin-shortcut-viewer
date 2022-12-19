@@ -17,7 +17,7 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
     : QWidget(parent),
       m_isGroup(isGroup)
 {
-    QColor textColor = QColor(0, 26, 46);
+    QColor textColor = QColor(65, 77, 104);
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
         textColor = QColor(192, 198, 212);
     QPalette labelPalette;
@@ -31,7 +31,7 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
     m_valueLabel = new QLabel(this);
     m_valueLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_valueLabel->setWordWrap(true);
-    m_nameLabel->setPalette(labelPalette);
+    m_valueLabel->setPalette(labelPalette);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(m_nameLabel);
