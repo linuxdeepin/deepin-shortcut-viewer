@@ -37,9 +37,13 @@ void MainWidget::setJsonData(const QString &data)
 
 void MainWidget::initUI()
 {
-    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog);
-    if (qApp->platformName() == "wayland")
+    if (qApp->platformName() == "wayland") {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog);
         setWindowFlag(Qt::FramelessWindowHint);
+    } else {
+        setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
+    }
+
 
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
