@@ -13,16 +13,16 @@
 
 QString SingleApplication::UserID = "1000";
 
-SingleApplication::SingleApplication(int &argc, char **argv, int): DApplication(argc, argv)
+SingleApplication::SingleApplication(int &argc, char **argv, int)
+    : DApplication(argc, argv)
 {
     m_localServer = new QLocalServer;
     initConnect();
-
 }
 
 SingleApplication::~SingleApplication()
 {
-    if (m_localServer){
+    if (m_localServer) {
         m_localServer->removeServer(m_localServer->serverName());
         m_localServer->close();
     }
@@ -33,20 +33,20 @@ void SingleApplication::initConnect()
     connect(m_localServer, &QLocalServer::newConnection, this, &SingleApplication::handleConnection);
 }
 
-void SingleApplication::newClientProcess(const QString &key , const QByteArray &message)
+void SingleApplication::newClientProcess(const QString &key, const QByteArray &message)
 {
     qDebug() << "The deepin-shortcut-viewer is running!";
     QLocalSocket *localSocket = new QLocalSocket;
     localSocket->connectToServer(userServerName(key));
-    if (localSocket->waitForConnected(1000)){
-        if (localSocket->state() == QLocalSocket::ConnectedState){
-            if (localSocket->isValid()){
+    if (localSocket->waitForConnected(1000)) {
+        if (localSocket->state() == QLocalSocket::ConnectedState) {
+            if (localSocket->isValid()) {
                 qDebug() << "start write";
                 localSocket->write(message);
                 localSocket->flush();
             }
         }
-    }else{
+    } else {
         qDebug() << localSocket->errorString();
     }
     qDebug() << "The deepin-shortcut-viewer is running end!";
@@ -55,9 +55,9 @@ void SingleApplication::newClientProcess(const QString &key , const QByteArray &
 QString SingleApplication::userServerName(const QString &key)
 {
     QString userKey;
-    if (userID() == "0"){
+    if (userID() == "0") {
         userKey = QString("%1/%2").arg("/tmp", key);
-    }else{
+    } else {
         userKey = QString("%1/%2/%3").arg("/var/run/user", userID(), key);
     }
     qDebug() << userKey;
@@ -97,7 +97,7 @@ void SingleApplication::processArgs(const QStringList &list)
         w = new MainWidget();
 
     w->setJsonData(jsonData);
-    pos -= QPoint(w->width() / 2,w->height() / 2);
+    pos -= QPoint(w->width() / 2, w->height() / 2);
 
     if (cmdManager.enableBypassWindowManagerHint())
         w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
@@ -132,13 +132,13 @@ bool SingleApplication::setSingleInstance(const QString &key)
 void SingleApplication::handleConnection()
 {
     qDebug() << "new connection is coming";
-    QLocalSocket* nextPendingConnection = m_localServer->nextPendingConnection();
+    QLocalSocket *nextPendingConnection = m_localServer->nextPendingConnection();
     connect(nextPendingConnection, SIGNAL(readyRead()), this, SLOT(readData()));
 }
 
 void SingleApplication::readData()
 {
-    const QByteArray &message = qobject_cast<QLocalSocket*>(sender())->readAll();
+    const QByteArray &message = qobject_cast<QLocalSocket *>(sender())->readAll();
 
     QStringList list;
 
@@ -147,4 +147,3 @@ void SingleApplication::readData()
 
     processArgs(list);
 }
-

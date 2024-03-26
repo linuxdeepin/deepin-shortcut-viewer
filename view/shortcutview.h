@@ -12,7 +12,8 @@ class ShortcutView : public QWidget
 {
     Q_OBJECT
 public:
-    struct Shortcut {
+    struct Shortcut
+    {
         QString name;
         QString value;
         double weight;
@@ -24,6 +25,7 @@ public:
 private:
     void initUI();
     void calcColumnData();
+    int itemSpacing();
 
 private:
     QHBoxLayout *m_mainLayout = nullptr;

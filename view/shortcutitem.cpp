@@ -51,8 +51,21 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
         mainLayout->setContentsMargins(10, 0, 10, 0);
     }
 
+    // 系统字号太大时，Text会超出label显示范围
+    int fontSize { m_nameLabel->fontInfo().pixelSize() };
+    static const QMap<int, int> sizeMap {
+        { 16, 310 },
+        { 17, 320 },
+        { 18, 330 },
+        { 19, 340 },
+        { 20, 350 }
+    };
+    int width { sizeMap.value(fontSize, 300) };
+    if (fontSize > 20)
+        width = 360;
+
     setLayout(mainLayout);
-    setFixedWidth(300);
+    setFixedWidth(width);
 }
 
 void ShortcutItem::setText(const QString &name, const QString &value)

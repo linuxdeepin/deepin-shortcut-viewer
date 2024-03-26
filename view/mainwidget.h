@@ -34,9 +34,10 @@ protected:
 
 private:
     void initUI();
+    void initMargins();
 
     ShortcutView *m_mainView = nullptr;
     QVBoxLayout *m_mainLayout = nullptr;
 };
 
-#endif // MAINWIDGET_H
+#endif   // MAINWIDGET_H

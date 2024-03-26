@@ -32,4 +32,4 @@ private:
     QLabel *m_valueLabel = nullptr;
 };
 
-#endif // SHORTCUTITEM_H
+#endif   // SHORTCUTITEM_H

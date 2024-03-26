@@ -8,12 +8,15 @@
 #include <DPlatformWindowHandle>
 #include <DApplication>
 #include <DGuiApplicationHelper>
+#include <DFontSizeManager>
 
 #include <QProcessEnvironment>
 #include <QTimer>
 #include <QPainter>
 #include <QPalette>
 #include <QKeyEvent>
+
+DWIDGET_USE_NAMESPACE
 
 MainWidget::MainWidget(QWidget *parent)
     : DBlurEffectWidget(parent)
@@ -44,12 +47,11 @@ void MainWidget::initUI()
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
     }
 
-
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
 
     setLayout(m_mainLayout);
-    setContentsMargins(CONTENT_MARGINS, CONTENT_MARGINS, CONTENT_MARGINS, CONTENT_MARGINS);
+    initMargins();
     setBlendMode(DBlurEffectWidget::BehindWindowBlend);
 
     if (DApplication::isDXcbPlatform()) {
@@ -58,6 +60,19 @@ void MainWidget::initUI()
         handle.setBorderWidth(2);
         handle.setBorderColor(QColor(255, 255, 255, static_cast<int>(255 * 0.15)));
     }
+}
+
+void MainWidget::initMargins()
+{
+    QLocale systemLocale = QLocale::system();
+    bool isChinese { systemLocale.language() == QLocale::Chinese };
+    int fontSize { DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6) };
+    static const QMap<int, int> marginMap {
+        { 18, isChinese ? CONTENT_MARGINS : 15 },
+        { 20, isChinese ? CONTENT_MARGINS : 8 }
+    };
+    int margin { marginMap.value(fontSize, CONTENT_MARGINS) };
+    setContentsMargins(margin, margin, margin, margin);
 }
 
 void MainWidget::mousePressEvent(QMouseEvent *e)
