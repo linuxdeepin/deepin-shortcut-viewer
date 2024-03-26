@@ -5,6 +5,8 @@
 #include "shortcutview.h"
 #include "shortcutitem.h"
 
+#include <DFontSizeManager>
+
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QJsonParseError>
@@ -15,6 +17,7 @@
 #include <QDebug>
 
 #define MAX_COL_COUNT 3
+DWIDGET_USE_NAMESPACE
 
 ShortcutView::ShortcutView(QWidget *parent)
     : QWidget(parent)
@@ -76,12 +79,12 @@ void ShortcutView::setData(const QString &data)
     calcColumnData();
     initUI();
 }
-
 void ShortcutView::initUI()
 {
+    int spacing { itemSpacing() };
     for (const auto &col : m_colDatas) {
         QVBoxLayout *colLayout = new QVBoxLayout(this);
-        colLayout->setSpacing(16);
+        colLayout->setSpacing(spacing);
         colLayout->setContentsMargins(0, 0, 0, 0);
         for (const auto &sc : col) {
             ShortcutItem *item = nullptr;
@@ -136,4 +139,22 @@ void ShortcutView::calcColumnData()
             }
         }
     }
+}
+
+int ShortcutView::itemSpacing()
+{
+    QLocale systemLocale = QLocale::system();
+    bool isChinese { systemLocale.language() == QLocale::Chinese };
+
+    int fontSize { DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6) };
+    static const QMap<int, int> spacingMap {
+        { 14, isChinese ? 16 : 8 },
+        { 15, isChinese ? 14 : 7 },
+        { 16, isChinese ? 12 : 6 },
+        { 17, isChinese ? 10 : 5 },
+        { 18, isChinese ? 8 : 4 },
+        { 19, isChinese ? 6 : 3 },
+        { 20, isChinese ? 4 : 2 }
+    };
+    return spacingMap.value(fontSize, 16);
 }

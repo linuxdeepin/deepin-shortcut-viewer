@@ -25,6 +25,7 @@ public:
 private:
     void initUI();
     void calcColumnData();
+    int itemSpacing();
 
 private:
     QHBoxLayout *m_mainLayout = nullptr;
