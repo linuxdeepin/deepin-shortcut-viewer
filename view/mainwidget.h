@@ -39,4 +39,4 @@ private:
     QVBoxLayout *m_mainLayout = nullptr;
 };
 
-#endif // MAINWIDGET_H
+#endif   // MAINWIDGET_H

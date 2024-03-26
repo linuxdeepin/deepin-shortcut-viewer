@@ -21,20 +21,20 @@ public:
     ~SingleApplication();
     void initConnect();
 
-    void newClientProcess(const QString& key, const QByteArray &message);
-    static QString userServerName(const QString& key);
+    void newClientProcess(const QString &key, const QByteArray &message);
+    static QString userServerName(const QString &key);
     static QString userID();
     static QString UserID;
 
     static void processArgs(const QStringList &list);
 
 public slots:
-    bool setSingleInstance(const QString& key);
+    bool setSingleInstance(const QString &key);
     void handleConnection();
     void readData();
 
 private:
-    QLocalServer*   m_localServer;
+    QLocalServer *m_localServer;
 };
 
-#endif // SINGLEAPPLICATION_H
+#endif   // SINGLEAPPLICATION_H

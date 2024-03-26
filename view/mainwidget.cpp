@@ -44,7 +44,6 @@ void MainWidget::initUI()
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
     }
 
-
     m_mainLayout = new QVBoxLayout;
     m_mainLayout->setMargin(0);
 

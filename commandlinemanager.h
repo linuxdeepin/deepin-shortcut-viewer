@@ -25,4 +25,4 @@ private:
     QCommandLineOption m_jsonDataOption;
 };
 
-#endif // COMMANDLINEMANAGER_H
+#endif   // COMMANDLINEMANAGER_H

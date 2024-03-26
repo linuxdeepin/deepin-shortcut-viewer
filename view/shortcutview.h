@@ -12,7 +12,8 @@ class ShortcutView : public QWidget
 {
     Q_OBJECT
 public:
-    struct Shortcut {
+    struct Shortcut
+    {
         QString name;
         QString value;
         double weight;
