@@ -7,6 +7,7 @@
 #include <DPalette>
 #include <DPaletteHelper>
 #include <DGuiApplicationHelper>
+#include <DFontSizeManager>
 
 #include <QHBoxLayout>
 #include <QPainter>
@@ -48,6 +49,21 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
 
         mainLayout->setContentsMargins(10, 5, 10, 6);
     } else {
+        if (qApp->devicePixelRatio() > 1.2) {
+            int fontSize { DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6) };
+            QFont font { m_nameLabel->font() };
+            static const QMap<int, int> fontMap {
+                { 15, 14 },
+                { 16, 16 },
+                { 17, 16 },
+                { 18, 16 },
+                { 20, 18 }
+            };
+            int size { fontMap.value(fontSize, 14) };
+            font.setPixelSize(size);
+            m_nameLabel->setFont(font);
+            m_valueLabel->setFont(font);
+        }
         mainLayout->setContentsMargins(10, 0, 10, 0);
     }
 

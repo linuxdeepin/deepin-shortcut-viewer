@@ -15,6 +15,7 @@
 #include <QVBoxLayout>
 #include <QtMath>
 #include <QDebug>
+#include <QApplication>
 
 #define MAX_COL_COUNT 3
 DWIDGET_USE_NAMESPACE
@@ -144,17 +145,19 @@ void ShortcutView::calcColumnData()
 int ShortcutView::itemSpacing()
 {
     QLocale systemLocale = QLocale::system();
-    bool isChinese { systemLocale.language() == QLocale::Chinese };
+    bool isNormal { systemLocale.language() == QLocale::Chinese };
+    if (isNormal && qApp->devicePixelRatio() > 1.2)
+        isNormal = false;
 
     int fontSize { DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6) };
     static const QMap<int, int> spacingMap {
-        { 14, isChinese ? 16 : 8 },
-        { 15, isChinese ? 14 : 7 },
-        { 16, isChinese ? 12 : 6 },
-        { 17, isChinese ? 10 : 5 },
-        { 18, isChinese ? 8 : 4 },
-        { 19, isChinese ? 6 : 3 },
-        { 20, isChinese ? 4 : 2 }
+        { 14, isNormal ? 16 : 8 },
+        { 15, isNormal ? 14 : 7 },
+        { 16, isNormal ? 12 : 6 },
+        { 17, isNormal ? 10 : 5 },
+        { 18, isNormal ? 8 : 4 },
+        { 19, isNormal ? 6 : 3 },
+        { 20, isNormal ? 4 : 2 }
     };
     return spacingMap.value(fontSize, 16);
 }
