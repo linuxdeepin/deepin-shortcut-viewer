@@ -15,6 +15,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QKeyEvent>
+#include <QScreen>
 
 DWIDGET_USE_NAMESPACE
 
@@ -64,14 +65,22 @@ void MainWidget::initUI()
 
 void MainWidget::initMargins()
 {
+
     QLocale systemLocale = QLocale::system();
-    bool isChinese { systemLocale.language() == QLocale::Chinese };
-    int fontSize { DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T6) };
-    static const QMap<int, int> marginMap {
-        { 18, isChinese ? CONTENT_MARGINS : 15 },
-        { 20, isChinese ? CONTENT_MARGINS : 8 }
-    };
-    int margin { marginMap.value(fontSize, CONTENT_MARGINS) };
+    bool isNormal { systemLocale.language() == QLocale::Chinese };
+    if (isNormal && qApp->devicePixelRatio() > 1.2)
+        isNormal = false;
+    // 高分屏不减少margin
+    QScreen *primaryScreen = QGuiApplication::primaryScreen();
+    if (primaryScreen) {
+        QSize screenSize = primaryScreen->size();
+        if (screenSize.width() > 2000)
+            isNormal = true;
+    }
+    int margin { CONTENT_MARGINS };
+    if (!isNormal)
+        margin = 10;
+
     setContentsMargins(margin, margin, margin, margin);
 }
 
