@@ -26,8 +26,6 @@ int main(int argc, char *argv[])
     app.setOrganizationName("deepin");
     app.setApplicationName(QObject::tr("Deepin Shortcut Viewer"));
     app.setApplicationVersion("v1.0");
-    app.setTheme("dark");
-
     //Logger handle
     DLogManager::registerConsoleAppender();
 

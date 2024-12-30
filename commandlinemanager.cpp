@@ -5,8 +5,9 @@
 #include "commandlinemanager.h"
 #include <QFile>
 #include <QRect>
-#include <QDesktopWidget>
 #include <QDebug>
+#include <QScreen>
+
 CommandLineManager::CommandLineManager()
     : m_posOption(QStringList() << "p"
                                 << "pos",
@@ -49,10 +50,13 @@ bool CommandLineManager::enableBypassWindowManagerHint() const
 QPoint CommandLineManager::pos()
 {
     QString posStr = m_commandLineParser.value(m_posOption);
-
     QStringList posStrs = posStr.split(",");
 
-    QPoint pos(qApp->desktop()->width() / 2, qApp->desktop()->height() / 2);
+    // 获取主屏幕并计算中心点
+    QScreen *primaryScreen = qApp->primaryScreen();
+    QRect screenGeometry = primaryScreen->geometry();
+    QPoint pos(screenGeometry.width() / 2, screenGeometry.height() / 2);
+    
     if (posStrs.length() == 2) {
         pos.setX(QString(posStrs[0]).toInt());
         pos.setY(QString(posStrs[1]).toInt());

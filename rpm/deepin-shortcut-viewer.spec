@@ -6,10 +6,14 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-shortcut-viewer
 Source0:        %{name}_%{version}.orig.tar.xz
 
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
 BuildRequires:  dtkwidget-devel
-BuildRequires:  pkgconfig(Qt5Core)
-BuildRequires:  pkgconfig(Qt5Widgets)
-BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  qt6-qtbase-devel
+BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  pkgconfig(Qt6Core)
+BuildRequires:  pkgconfig(Qt6Widgets)
+BuildRequires:  pkgconfig(Qt6Network)
 Provides:       bundled(CuteLogger)
 
 %description
@@ -19,11 +23,11 @@ The program displays a shortcut key window when a JSON data is passed.
 %setup -q
 
 %build
-%qmake_qt5 PREFIX=%{_prefix}
-%make_build
+%cmake
+%cmake_build
 
 %install
-%make_install INSTALL_ROOT="%{buildroot}"
+%cmake_install
 
 %files
 %doc README.md
@@ -31,6 +35,10 @@ The program displays a shortcut key window when a JSON data is passed.
 %{_bindir}/%{name}
 
 %changelog
+* Thu Jan 31 2024 Package Maintainer <maintainer@deepin.org> - 5.0.5-2
+- Update to use Qt6
+- Switch build system to CMake
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.5-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 

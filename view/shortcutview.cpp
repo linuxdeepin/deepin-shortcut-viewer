@@ -33,8 +33,7 @@ ShortcutView::ShortcutView(QWidget *parent)
 
 void ShortcutView::setData(const QString &data)
 {
-    QByteArray byteArry;
-    byteArry.append(data);
+    QByteArray byteArry = data.toUtf8();
 
     QJsonParseError jsError;
     QJsonDocument doc = QJsonDocument::fromJson(byteArry, &jsError);

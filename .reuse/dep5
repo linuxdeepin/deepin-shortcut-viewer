@@ -35,7 +35,7 @@ Copyright: None
 License: CC0-1.0
 
 # Project file
-Files: *.pro
+Files: *CMakeLists.txt
 Copyright: None
 License: CC0-1.0
 
