@@ -42,7 +42,7 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
     if (isGroup) {
         QFont font;
         font.setPixelSize(17);
-        font.setWeight(70);
+        font.setWeight(QFont::Medium);
 
         m_nameLabel->setFont(font);
         m_valueLabel->setFont(font);

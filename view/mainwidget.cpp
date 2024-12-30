@@ -49,11 +49,13 @@ void MainWidget::initUI()
     }
 
     m_mainLayout = new QVBoxLayout;
-    m_mainLayout->setMargin(0);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
 
     setLayout(m_mainLayout);
     initMargins();
     setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    setBlurRectXRadius(8);
+    setBlurRectYRadius(8);
 
     if (DApplication::isDXcbPlatform()) {
         DPlatformWindowHandle handle(this);
