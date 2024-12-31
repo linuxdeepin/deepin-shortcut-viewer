@@ -1,3 +1,9 @@
+deepin-shortcut-viewer (5.5.0) unstable; urgency=medium
+
+  * adapto to Qt6
+
+ -- zhangsheng <zhangsheng@uniontech.com>  Tue, 31 Dec 2024 10:04:59 +0800
+
 deepin-shortcut-viewer (5.0.9) unstable; urgency=medium
 
   * ui layout
