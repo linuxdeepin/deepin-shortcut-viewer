@@ -7,7 +7,7 @@ Build-Depends: debhelper (>=9),
                cmake,
                qt6-base-dev,
                qt6-base-private-dev,
-               libdtkwidget-dev
+               libdtk6widget-dev
 Standards-Version: 3.9.8
 Homepage: http://www.deepin.org
 

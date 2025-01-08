@@ -1,3 +1,9 @@
+deepin-shortcut-viewer (5.5.1) UNRELEASED; urgency=medium
+
+  * add libdtk6widget-dev
+
+ -- zhangsheng <zhangsheng@uniontech.com>  Wed, 08 Jan 2025 09:45:24 +0800
+
 deepin-shortcut-viewer (5.5.0) unstable; urgency=medium
 
   * adapto to Qt6
