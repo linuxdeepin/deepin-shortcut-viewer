@@ -1,6 +1,13 @@
-deepin-shortcut-viewer (5.5.1) UNRELEASED; urgency=medium
+deepin-shortcut-viewer (5.5.2) unstable; urgency=medium
+
+  *just update version 
+
+ -- zhangsheng <zhangsheng@uniontech.com>  Wed, 08 Jan 2025 10:12:07 +0800
+
+deepin-shortcut-viewer (5.5.1) unstable; urgency=medium
 
   * add libdtk6widget-dev
+  * 
 
  -- zhangsheng <zhangsheng@uniontech.com>  Wed, 08 Jan 2025 09:45:24 +0800
 
