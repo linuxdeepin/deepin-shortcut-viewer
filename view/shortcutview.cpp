@@ -51,7 +51,7 @@ void ShortcutView::setData(const QString &data)
             }
         }
     } else {
-        qDebug() << "Json data parsing error:" << jsError.error << jsError.errorString();
+        qWarning() << "Failed to parse shortcut data:" << jsError.errorString() << "at offset" << jsError.offset;
         return;
     }
 
@@ -79,6 +79,7 @@ void ShortcutView::setData(const QString &data)
     calcColumnData();
     initUI();
 }
+
 void ShortcutView::initUI()
 {
     int spacing { itemSpacing() };

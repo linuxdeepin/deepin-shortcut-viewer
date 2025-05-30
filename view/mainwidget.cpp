@@ -27,6 +27,7 @@ MainWidget::MainWidget(QWidget *parent)
 
 void MainWidget::setJsonData(const QString &data)
 {
+    qDebug() << "Setting new JSON data for shortcut view - Data: " << data;
     if (m_mainView) {
         m_mainLayout->removeWidget(m_mainView);
         m_mainView->deleteLater();
@@ -42,9 +43,11 @@ void MainWidget::setJsonData(const QString &data)
 void MainWidget::initUI()
 {
     if (qApp->platformName() == "wayland") {
+        qDebug() << "Setting Wayland-specific window flags";
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog);
         setWindowFlag(Qt::FramelessWindowHint);
     } else {
+        qDebug() << "Setting X11 window flags";
         setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Popup);
     }
 
@@ -58,8 +61,8 @@ void MainWidget::initUI()
     setBlurRectYRadius(8);
 
     if (DApplication::isDXcbPlatform()) {
+        qDebug() << "Setting DPlatform window handle properties";
         DPlatformWindowHandle handle(this);
-
         handle.setBorderWidth(2);
         handle.setBorderColor(QColor(255, 255, 255, static_cast<int>(255 * 0.15)));
     }
@@ -109,8 +112,10 @@ void MainWidget::focusInEvent(QFocusEvent *e)
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_Escape || e->key() == Qt::Key_Back)
+    if (e->key() == Qt::Key_Escape || e->key() == Qt::Key_Back) {
+        qDebug() << "Escape/Back key pressed, hiding window";
         hide();
+    }
 }
 
 void MainWidget::showEvent(QShowEvent *e)
@@ -121,8 +126,10 @@ void MainWidget::showEvent(QShowEvent *e)
     grabKeyboard();
 
     QTimer::singleShot(500, this, [this]() {
-        if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier))
+        if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier)) {
+            qDebug() << "Modifier keys not pressed, hiding window";
             hide();
+        }
     });
 }
 

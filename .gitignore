@@ -35,3 +35,6 @@ build*
 
 vendor/include/*
 vendor/lib/*
+.cursorindexingignore
+.cursor
+.specstory

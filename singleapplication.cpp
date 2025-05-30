@@ -35,21 +35,20 @@ void SingleApplication::initConnect()
 
 void SingleApplication::newClientProcess(const QString &key, const QByteArray &message)
 {
-    qDebug() << "The deepin-shortcut-viewer is running!";
+    qInfo() << "Attempting to connect to existing instance with key:" << key;
     QLocalSocket *localSocket = new QLocalSocket;
     localSocket->connectToServer(userServerName(key));
     if (localSocket->waitForConnected(1000)) {
         if (localSocket->state() == QLocalSocket::ConnectedState) {
             if (localSocket->isValid()) {
-                qDebug() << "start write";
+                qDebug() << "Connected to existing instance, sending message";
                 localSocket->write(message);
                 localSocket->flush();
             }
         }
     } else {
-        qDebug() << localSocket->errorString();
+        qWarning() << "Failed to connect to existing instance:" << localSocket->errorString();
     }
-    qDebug() << "The deepin-shortcut-viewer is running end!";
 }
 
 QString SingleApplication::userServerName(const QString &key)
@@ -60,7 +59,7 @@ QString SingleApplication::userServerName(const QString &key)
     } else {
         userKey = QString("%1/%2/%3").arg("/var/run/user", userID(), key);
     }
-    qDebug() << userKey;
+    qDebug() << "Generated server name:" << userKey << "for user:" << userID();
     return userKey;
 }
 
@@ -85,26 +84,31 @@ void SingleApplication::processArgs(const QStringList &list)
 
     static MainWidget *w = Q_NULLPTR;
 
-    if (jsonData == "")
+    if (jsonData.isEmpty()) {
+        qDebug() << "No JSON data to process";
         return;
+    }
 
     if (w && cmdManager.enableBypassWindowManagerHint()) {
         w->deleteLater();
         w = Q_NULLPTR;
     }
 
-    if (!w)
+    if (!w) {
+        qDebug() << "Creating new main window";
         w = new MainWidget();
+    }
 
     w->setJsonData(jsonData);
     pos -= QPoint(w->width() / 2, w->height() / 2);
 
-    if (cmdManager.enableBypassWindowManagerHint())
+    if (cmdManager.enableBypassWindowManagerHint()) {
+        qDebug() << "Setting bypass window manager hint";
         w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
+    }
 
     w->show();
     w->move(pos);
-    //w->activateWindow();
     w->setFocus();
 }
 
@@ -119,11 +123,12 @@ bool SingleApplication::setSingleInstance(const QString &key)
     bool result = localSocket->waitForConnected(1000);
     localSocket->deleteLater();
 
-    if (result)
+    if (result) {
+        qInfo() << "Another instance is already running";
         return false;
+    }
 
     m_localServer->removeServer(userKey);
-
     bool f = m_localServer->listen(userKey);
 
     return f;
@@ -131,7 +136,7 @@ bool SingleApplication::setSingleInstance(const QString &key)
 
 void SingleApplication::handleConnection()
 {
-    qDebug() << "new connection is coming";
+    qDebug() << "New connection received";
     QLocalSocket *nextPendingConnection = m_localServer->nextPendingConnection();
     connect(nextPendingConnection, SIGNAL(readyRead()), this, SLOT(readData()));
 }
