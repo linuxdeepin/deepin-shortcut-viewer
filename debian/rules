@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 export QT_SELECT=5
+export DEB_LDFLAGS_APPEND = -Wl,-z,now
 
 %:
 	dh $@ 
