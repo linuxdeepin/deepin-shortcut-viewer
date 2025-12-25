@@ -100,15 +100,15 @@ void SingleApplication::processArgs(const QStringList &list)
     }
 
     w->setJsonData(jsonData);
-    pos -= QPoint(w->width() / 2, w->height() / 2);
 
     if (cmdManager.enableBypassWindowManagerHint()) {
         qDebug() << "Setting bypass window manager hint";
         w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
     }
 
-    w->show();
+    pos -= QPoint(w->width() / 2, w->height() / 2);
     w->move(pos);
+    w->show();
     w->setFocus();
 }
 
