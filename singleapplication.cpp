@@ -44,11 +44,13 @@ void SingleApplication::newClientProcess(const QString &key, const QByteArray &m
                 qDebug() << "Connected to existing instance, sending message";
                 localSocket->write(message);
                 localSocket->flush();
+                localSocket->waitForBytesWritten(1000);
             }
         }
     } else {
         qWarning() << "Failed to connect to existing instance:" << localSocket->errorString();
     }
+    localSocket->deleteLater();
 }
 
 QString SingleApplication::userServerName(const QString &key)
@@ -99,6 +101,8 @@ void SingleApplication::processArgs(const QStringList &list)
         w = new MainWidget();
     }
 
+    // 先隐藏窗口，设置数据后触发布局计算
+    w->hide();
     w->setJsonData(jsonData);
 
     if (cmdManager.enableBypassWindowManagerHint()) {
@@ -106,6 +110,11 @@ void SingleApplication::processArgs(const QStringList &list)
         w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
     }
 
+    // 强制处理事件并调整大小
+    QApplication::processEvents();
+    w->adjustSize();
+
+    // 计算居中位置并移动到正确位置后显示
     pos -= QPoint(w->width() / 2, w->height() / 2);
     w->move(pos);
     w->show();
@@ -147,8 +156,12 @@ void SingleApplication::readData()
 
     QStringList list;
 
-    for (const QByteArray &data : message.split('\0'))
-        list << QString::fromLocal8Bit(data);
+    for (const QByteArray &data : message.split('\0')) {
+        QString str = QString::fromLocal8Bit(data);
+        if (!str.isEmpty()) {
+            list << str;
+        }
+    }
 
     processArgs(list);
 }
