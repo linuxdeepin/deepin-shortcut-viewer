@@ -9,6 +9,9 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+# 启用位置无关代码，提高安全性（ASLR）
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # 设置安装路径前缀
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_FALSY)
     set(CMAKE_INSTALL_PREFIX /usr)
@@ -57,6 +60,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+# 启用位置无关可执行文件，提高安全性
+target_link_options(${PROJECT_NAME} PRIVATE -pie)
 
 # 安装目标
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin) 
