@@ -35,7 +35,7 @@ void SingleApplication::initConnect()
 
 void SingleApplication::newClientProcess(const QString &key, const QByteArray &message)
 {
-    qDebug() << "The deepin-shortcut-viewer is running!";
+    qDebug() << "The deepin-shortcut-viewer is running!" << qApp->applicationPid();
     QLocalSocket *localSocket = new QLocalSocket;
     localSocket->connectToServer(userServerName(key));
     if (localSocket->waitForConnected(1000)) {
@@ -49,7 +49,7 @@ void SingleApplication::newClientProcess(const QString &key, const QByteArray &m
     } else {
         qDebug() << localSocket->errorString();
     }
-    qDebug() << "The deepin-shortcut-viewer is running end!";
+    qDebug() << "The deepin-shortcut-viewer is running end!" << qApp->applicationPid();
 }
 
 QString SingleApplication::userServerName(const QString &key)
@@ -82,6 +82,7 @@ void SingleApplication::processArgs(const QStringList &list)
 
     QString jsonData = cmdManager.jsonData();
     QPoint pos = cmdManager.pos();
+    qInfo() << " SingleApplication::processArgs ========= " << pos << qApp->applicationPid();
 
     static MainWidget *w = Q_NULLPTR;
 
@@ -93,18 +94,28 @@ void SingleApplication::processArgs(const QStringList &list)
         w = Q_NULLPTR;
     }
 
-    if (!w)
+    if (!w) {
         w = new MainWidget();
+        connect(w, &MainWidget::resizeOver, this, []{
+            if (!w || !w->property("needMovePos").isValid()) {
+                qWarning() << "SingleApplication:: reszie event to move pos, widget is nullptr : " << !w << ", valid pos : " << (w ? false : w->property("needMovePos").isValid());
+                return ;
+            }
+            auto movePos = w->property("needMovePos").value<QPoint>() - QPoint(w->width() / 2, w->height() / 2);
+            qInfo() << "SingleApplication:: reszie event to move pos, orgin pos = " << w->property("needMovePos").value<QPoint>()
+                    << ", offset pos = " << QPoint(w->width() / 2, w->height() / 2) << ", move pos = " << movePos;
+            w->setGeometry(movePos.x(), movePos.y(), w->width(), w->height());
+        });
+    }
 
     w->setJsonData(jsonData);
-    pos -= QPoint(w->width() / 2, w->height() / 2);
 
     if (cmdManager.enableBypassWindowManagerHint())
         w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
 
+    w->setProperty("needMovePos", pos);
     w->show();
-    w->move(pos);
-    //w->activateWindow();
+
     w->setFocus();
 }
 

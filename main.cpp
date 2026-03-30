@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
     //Handle singlelentan process communications;
     if (isSingleApplication) {
-        SingleApplication::processArgs(app.arguments());
+        app.processArgs(app.arguments());
 
         return app.exec();
     } else {

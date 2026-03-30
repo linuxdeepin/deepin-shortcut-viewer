@@ -31,6 +31,10 @@ protected:
     void showEvent(QShowEvent *e) Q_DECL_OVERRIDE;
     void hideEvent(QHideEvent *e) Q_DECL_OVERRIDE;
     void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+
+signals:
+    void resizeOver();
 
 private:
     void initUI();

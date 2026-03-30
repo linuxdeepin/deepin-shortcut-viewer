@@ -26,7 +26,7 @@ public:
     static QString userID();
     static QString UserID;
 
-    static void processArgs(const QStringList &list);
+    void processArgs(const QStringList &list);
 
 public slots:
     bool setSingleInstance(const QString &key);
