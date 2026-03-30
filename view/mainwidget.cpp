@@ -122,6 +122,7 @@ void MainWidget::showEvent(QShowEvent *e)
         if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier))
             hide();
     });
+    emit resizeOver();
 }
 
 void MainWidget::hideEvent(QHideEvent *e)
@@ -132,4 +133,12 @@ void MainWidget::hideEvent(QHideEvent *e)
 void MainWidget::paintEvent(QPaintEvent *e)
 {
     DBlurEffectWidget::paintEvent(e);
+}
+
+void MainWidget::resizeEvent(QResizeEvent *e)
+{
+    DBlurEffectWidget::resizeEvent(e);
+    // 当widget真正resize时，发送高度变化信号
+    // 因为它在实际几何变化后触发
+    emit resizeOver();
 }
