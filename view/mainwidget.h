@@ -5,7 +5,7 @@
 #ifndef MAINWIDGET_H
 #define MAINWIDGET_H
 
-#include <DBlurEffectWidget>
+#include <DWidget>
 #include <QVBoxLayout>
 
 #define CONTENT_MARGINS 30
@@ -13,13 +13,14 @@
 DWIDGET_USE_NAMESPACE
 
 class ShortcutView;
-class MainWidget : public DBlurEffectWidget
+class MainWidget : public DWidget
 {
     Q_OBJECT
 public:
     MainWidget(QWidget *parent = nullptr);
 
     void setJsonData(const QString &data);
+    void setThemeName(const QString &themeName);
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -40,6 +41,7 @@ private:
     void initUI();
     void initMargins();
 
+    QString m_themeName;
     ShortcutView *m_mainView = nullptr;
     QVBoxLayout *m_mainLayout = nullptr;
 };
