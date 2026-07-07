@@ -15,12 +15,14 @@
 #include <QPainter>
 #include <QPalette>
 #include <QKeyEvent>
+#include <QPainterPath>
+#include <QRegion>
 #include <QScreen>
 
 DWIDGET_USE_NAMESPACE
 
 MainWidget::MainWidget(QWidget *parent)
-    : DBlurEffectWidget(parent)
+    : DWidget(parent)
 {
     initUI();
 }
@@ -34,9 +36,19 @@ void MainWidget::setJsonData(const QString &data)
 
     m_mainView = new ShortcutView(this);
     m_mainView->setObjectName("MainView");
+    m_mainView->setAttribute(Qt::WA_TranslucentBackground);
     m_mainLayout->addWidget(m_mainView);
     m_mainView->setData(data);
     adjustSize();
+}
+
+void MainWidget::setThemeName(const QString &themeName)
+{
+    if (m_themeName == themeName)
+        return;
+
+    m_themeName = themeName;
+    update();
 }
 
 void MainWidget::initUI()
@@ -53,7 +65,10 @@ void MainWidget::initUI()
 
     setLayout(m_mainLayout);
     initMargins();
-    setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_TranslucentBackground);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+            this, QOverload<>::of(&MainWidget::update));
 
     if (DApplication::isDXcbPlatform()) {
         DPlatformWindowHandle handle(this);
@@ -87,14 +102,14 @@ void MainWidget::initMargins()
 void MainWidget::mousePressEvent(QMouseEvent *e)
 {
     hide();
-    DBlurEffectWidget::mousePressEvent(e);
+    DWidget::mousePressEvent(e);
 }
 
 void MainWidget::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
         releaseKeyboard();
-        DBlurEffectWidget::keyReleaseEvent(e);
+        DWidget::keyReleaseEvent(e);
         hide();
     }
 }
@@ -102,7 +117,7 @@ void MainWidget::keyReleaseEvent(QKeyEvent *e)
 void MainWidget::focusInEvent(QFocusEvent *e)
 {
     grabKeyboard();
-    DBlurEffectWidget::focusInEvent(e);
+    DWidget::focusInEvent(e);
 }
 
 void MainWidget::keyPressEvent(QKeyEvent *e)
@@ -113,7 +128,7 @@ void MainWidget::keyPressEvent(QKeyEvent *e)
 
 void MainWidget::showEvent(QShowEvent *e)
 {
-    DBlurEffectWidget::showEvent(e);
+    DWidget::showEvent(e);
 
     setFocus(Qt::MouseFocusReason);
     grabKeyboard();
@@ -127,17 +142,39 @@ void MainWidget::showEvent(QShowEvent *e)
 
 void MainWidget::hideEvent(QHideEvent *e)
 {
-    DBlurEffectWidget::hideEvent(e);
+    DWidget::hideEvent(e);
 }
 
 void MainWidget::paintEvent(QPaintEvent *e)
 {
-    DBlurEffectWidget::paintEvent(e);
+    Q_UNUSED(e)
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
+
+    const auto themeType = DGuiApplicationHelper::instance()->themeType();
+    const QColor backgroundColor = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Background);
+    bool darkTheme = themeType == DGuiApplicationHelper::DarkType || backgroundColor.lightness() < 128;
+    if (m_themeName == "dark")
+        darkTheme = true;
+    else if (m_themeName == "light")
+        darkTheme = false;
+
+    QPainterPath path;
+    path.addRoundedRect(rect(), 18, 18);
+    painter.setBrush(darkTheme ? QColor(32, 32, 32) : QColor(255, 255, 255));
+    painter.drawPath(path);
 }
 
 void MainWidget::resizeEvent(QResizeEvent *e)
 {
-    DBlurEffectWidget::resizeEvent(e);
+    DWidget::resizeEvent(e);
+
+    QPainterPath path;
+    path.addRoundedRect(rect(), 18, 18);
+    setMask(QRegion(path.toFillPolygon().toPolygon()));
+
     // 当widget真正resize时，发送高度变化信号
     // 因为它在实际几何变化后触发
     emit resizeOver();

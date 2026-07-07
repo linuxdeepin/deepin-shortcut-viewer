@@ -9,6 +9,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
+#include <QPointer>
 #include <QDir>
 
 QString SingleApplication::UserID = "1000";
@@ -96,18 +97,21 @@ void SingleApplication::processArgs(const QStringList &list)
 
     if (!w) {
         w = new MainWidget();
-        connect(w, &MainWidget::resizeOver, this, []{
-            if (!w || !w->property("needMovePos").isValid()) {
-                qWarning() << "SingleApplication:: reszie event to move pos, widget is nullptr : " << !w << ", valid pos : " << (w ? false : w->property("needMovePos").isValid());
+        QPointer<MainWidget> weakWidget = w;
+        connect(w, &MainWidget::resizeOver, this, [weakWidget]{
+            if (weakWidget.isNull() || !weakWidget->property("needMovePos").isValid()) {
+                qWarning() << "SingleApplication:: reszie event to move pos, widget is nullptr : " << weakWidget.isNull()
+                           << ", valid pos : " << (!weakWidget.isNull() && weakWidget->property("needMovePos").isValid());
                 return ;
             }
-            auto movePos = w->property("needMovePos").value<QPoint>() - QPoint(w->width() / 2, w->height() / 2);
-            qInfo() << "SingleApplication:: reszie event to move pos, orgin pos = " << w->property("needMovePos").value<QPoint>()
-                    << ", offset pos = " << QPoint(w->width() / 2, w->height() / 2) << ", move pos = " << movePos;
-            w->setGeometry(movePos.x(), movePos.y(), w->width(), w->height());
+            auto movePos = weakWidget->property("needMovePos").value<QPoint>() - QPoint(weakWidget->width() / 2, weakWidget->height() / 2);
+            qInfo() << "SingleApplication:: reszie event to move pos, orgin pos = " << weakWidget->property("needMovePos").value<QPoint>()
+                    << ", offset pos = " << QPoint(weakWidget->width() / 2, weakWidget->height() / 2) << ", move pos = " << movePos;
+            weakWidget->setGeometry(movePos.x(), movePos.y(), weakWidget->width(), weakWidget->height());
         });
     }
 
+    w->setThemeName(cmdManager.theme());
     w->setJsonData(jsonData);
 
     if (cmdManager.enableBypassWindowManagerHint())

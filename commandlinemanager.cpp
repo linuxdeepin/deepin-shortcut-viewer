@@ -15,13 +15,18 @@ CommandLineManager::CommandLineManager()
       m_jsonDataOption(QStringList() << "j"
                                      << "json-data",
                        QCoreApplication::translate("main", "Directly convert a json data to this program. See https://github.com/linuxdeepin/deepin-shortcut-viewer or docs provided with the program for more information of this decscription"),
-                       " ")
+                       " "),
+      m_themeOption(QStringList() << "t"
+                                  << "theme",
+                    QCoreApplication::translate("main", "Set shortcut viewer theme, supported values: dark, light"),
+                    " ")
 {
     m_commandLineParser.setApplicationDescription("Test helper");
     m_commandLineParser.addHelpOption();
     m_commandLineParser.addVersionOption();
     m_commandLineParser.addOption(m_posOption);
     m_commandLineParser.addOption(m_jsonDataOption);
+    m_commandLineParser.addOption(m_themeOption);
     m_commandLineParser.addOption(QCommandLineOption(QStringList() << "b"
                                                                    << "bypass",
                                                      "Enable bypass window manager hint"));
@@ -39,6 +44,11 @@ void CommandLineManager::process(const QStringList &list)
 QString CommandLineManager::jsonData()
 {
     return m_commandLineParser.value(m_jsonDataOption);
+}
+
+QString CommandLineManager::theme()
+{
+    return m_commandLineParser.value(m_themeOption).toLower();
 }
 
 bool CommandLineManager::enableBypassWindowManagerHint() const

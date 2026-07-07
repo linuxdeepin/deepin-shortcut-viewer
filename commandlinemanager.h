@@ -16,6 +16,7 @@ public:
     void process(const QStringList &list);
     QPoint pos();
     QString jsonData();
+    QString theme();
 
     bool enableBypassWindowManagerHint() const;
 
@@ -23,6 +24,7 @@ private:
     QCommandLineParser m_commandLineParser;
     QCommandLineOption m_posOption;
     QCommandLineOption m_jsonDataOption;
+    QCommandLineOption m_themeOption;
 };
 
 #endif   // COMMANDLINEMANAGER_H
