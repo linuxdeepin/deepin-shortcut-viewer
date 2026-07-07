@@ -108,6 +108,7 @@ void SingleApplication::processArgs(const QStringList &list)
         });
     }
 
+    w->setThemeName(cmdManager.theme());
     w->setJsonData(jsonData);
 
     if (cmdManager.enableBypassWindowManagerHint())

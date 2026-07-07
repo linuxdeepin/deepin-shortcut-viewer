@@ -34,9 +34,19 @@ void MainWidget::setJsonData(const QString &data)
 
     m_mainView = new ShortcutView(this);
     m_mainView->setObjectName("MainView");
+    m_mainView->setAttribute(Qt::WA_TranslucentBackground);
     m_mainLayout->addWidget(m_mainView);
     m_mainView->setData(data);
     adjustSize();
+}
+
+void MainWidget::setThemeName(const QString &themeName)
+{
+    if (m_themeName == themeName)
+        return;
+
+    m_themeName = themeName;
+    update();
 }
 
 void MainWidget::initUI()
@@ -53,7 +63,12 @@ void MainWidget::initUI()
 
     setLayout(m_mainLayout);
     initMargins();
-    setBlendMode(DBlurEffectWidget::BehindWindowBlend);
+    setAutoFillBackground(false);
+    setAttribute(Qt::WA_TranslucentBackground);
+    setBlurEnabled(false);
+    updateMaskColor();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+            this, &MainWidget::updateMaskColor);
 
     if (DApplication::isDXcbPlatform()) {
         DPlatformWindowHandle handle(this);
@@ -61,6 +76,11 @@ void MainWidget::initUI()
         handle.setBorderWidth(2);
         handle.setBorderColor(QColor(255, 255, 255, static_cast<int>(255 * 0.15)));
     }
+}
+
+void MainWidget::updateMaskColor()
+{
+    update();
 }
 
 void MainWidget::initMargins()
@@ -132,7 +152,20 @@ void MainWidget::hideEvent(QHideEvent *e)
 
 void MainWidget::paintEvent(QPaintEvent *e)
 {
-    DBlurEffectWidget::paintEvent(e);
+    Q_UNUSED(e)
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    painter.setPen(Qt::NoPen);
+
+    bool darkTheme = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType;
+    if (m_themeName == "dark")
+        darkTheme = true;
+    else if (m_themeName == "light")
+        darkTheme = false;
+
+    painter.setBrush(darkTheme ? QColor(32, 32, 32) : QColor(255, 255, 255));
+    painter.drawRoundedRect(rect(), 18, 18);
 }
 
 void MainWidget::resizeEvent(QResizeEvent *e)

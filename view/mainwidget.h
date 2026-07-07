@@ -20,6 +20,7 @@ public:
     MainWidget(QWidget *parent = nullptr);
 
     void setJsonData(const QString &data);
+    void setThemeName(const QString &themeName);
 
 protected:
     void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
@@ -39,7 +40,9 @@ signals:
 private:
     void initUI();
     void initMargins();
+    void updateMaskColor();
 
+    QString m_themeName;
     ShortcutView *m_mainView = nullptr;
     QVBoxLayout *m_mainLayout = nullptr;
 };
