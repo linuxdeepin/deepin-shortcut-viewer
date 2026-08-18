@@ -6,6 +6,7 @@
 #include <DLog>
 //#include "widget.h"
 #include "./view/mainwidget.h"
+#include <DGuiApplicationHelper>
 #include <QRect>
 #include <QPoint>
 #include <QFile>
@@ -28,6 +29,15 @@ int main(int argc, char *argv[])
     app.setProductName(QObject::tr("Deepin Shortcut Viewer"));
     app.setApplicationDisplayName(QObject::tr("Deepin Shortcut Viewer"));
     app.setApplicationVersion("v1.0");
+
+    // The viewer is a transient popup: its theme must follow the system theme
+    // or the --theme passed by the caller, but must never persist that
+    // transient choice to the user's DTK theme preference (org.deepin.dtk.
+    // preference). Without this, a caller passing --theme=light would write
+    // "light" to the dconfig and the viewer would later start in light theme
+    // regardless of the actual system theme. This also keeps the
+    // setPaletteType() call in MainWidget::setThemeName non-persistent.
+    DGuiApplicationHelper::setAttribute(DGuiApplicationHelper::DontSaveApplicationTheme, true);
 
     //Logger handle
     DLogManager::registerConsoleAppender();

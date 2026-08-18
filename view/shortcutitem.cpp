@@ -18,21 +18,21 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
     : QWidget(parent),
       m_isGroup(isGroup)
 {
-    QColor textColor = QColor(65, 77, 104);
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
-        textColor = QColor(192, 198, 212);
-    QPalette labelPalette;
-    labelPalette.setColor(QPalette::WindowText, textColor);
-
     m_nameLabel = new QLabel(this);
     m_nameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_nameLabel->setWordWrap(true);
-    m_nameLabel->setPalette(labelPalette);
 
     m_valueLabel = new QLabel(this);
     m_valueLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_valueLabel->setWordWrap(true);
-    m_valueLabel->setPalette(labelPalette);
+
+    // The text color derives from the application theme type, which
+    // MainWidget::setThemeName syncs to the --theme passed by the caller.
+    // Re-apply the palette on theme changes so existing items stay consistent
+    // with the popup background instead of only honoring the system theme.
+    updateLabelPalette();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged,
+            this, &ShortcutItem::updateLabelPalette);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(m_nameLabel);
@@ -82,6 +82,19 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
 
     setLayout(mainLayout);
     setFixedWidth(width);
+}
+
+void ShortcutItem::updateLabelPalette()
+{
+    QColor textColor = QColor(65, 77, 104);
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
+        textColor = QColor(192, 198, 212);
+
+    QPalette labelPalette;
+    labelPalette.setColor(QPalette::WindowText, textColor);
+
+    m_nameLabel->setPalette(labelPalette);
+    m_valueLabel->setPalette(labelPalette);
 }
 
 void ShortcutItem::setText(const QString &name, const QString &value)

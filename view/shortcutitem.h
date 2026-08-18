@@ -25,6 +25,8 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    void updateLabelPalette();
+
     bool m_hasBackground = false;
     bool m_isGroup = false;
 
