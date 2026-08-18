@@ -48,6 +48,23 @@ void MainWidget::setThemeName(const QString &themeName)
         return;
 
     m_themeName = themeName;
+
+    // Sync the application palette type with the requested theme so that child
+    // widgets deriving their colors from DGuiApplicationHelper::themeType()
+    // (e.g. ShortcutItem text) stay consistent with the popup background,
+    // which already honors --theme. Without this the foreground follows the
+    // system theme while the background follows --theme, producing a
+    // low-contrast popup when the two differ (e.g. system dark + app light).
+    //
+    // setPaletteType is used instead of the deprecated setThemeType (which
+    // merely forwards to setPaletteType). DontSaveApplicationTheme is set in
+    // main() so this never persists the caller's transient theme to the user's
+    // DTK theme preference.
+    if (themeName == "dark")
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
+    else if (themeName == "light")
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+
     update();
 }
 
