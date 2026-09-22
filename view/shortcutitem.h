@@ -21,12 +21,17 @@ public:
     void setEnableBackground(bool enable);
     bool enableBackground() const;
 
+    void setDarkTheme(bool dark);
+
 protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    void updateTextPalette();
+
     bool m_hasBackground = false;
     bool m_isGroup = false;
+    bool m_darkTheme = false;
 
     QLabel *m_nameLabel = nullptr;
     QLabel *m_valueLabel = nullptr;

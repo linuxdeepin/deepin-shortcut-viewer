@@ -6,6 +6,7 @@
 #include "shortcutitem.h"
 
 #include <DFontSizeManager>
+#include <DGuiApplicationHelper>
 
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -80,6 +81,33 @@ void ShortcutView::setData(const QString &data)
     calcColumnData();
     initUI();
 }
+
+void ShortcutView::setThemeName(const QString &themeName)
+{
+    if (m_themeName == themeName)
+        return;
+
+    m_themeName = themeName;
+
+    const bool dark = isDarkTheme();
+    const auto items = findChildren<ShortcutItem *>();
+    for (auto *item : items)
+        item->setDarkTheme(dark);
+}
+
+bool ShortcutView::isDarkTheme() const
+{
+    // 优先使用调用方通过 --theme 传入的主题，保证弹窗文字与背景一致。
+    if (m_themeName == "dark")
+        return true;
+    if (m_themeName == "light")
+        return false;
+
+    const auto themeType = DGuiApplicationHelper::instance()->themeType();
+    const QColor backgroundColor = DGuiApplicationHelper::instance()->applicationPalette().window().color();
+    return themeType == DGuiApplicationHelper::DarkType || backgroundColor.value() < 128;
+}
+
 void ShortcutView::initUI()
 {
     int spacing { itemSpacing() };
@@ -99,6 +127,7 @@ void ShortcutView::initUI()
                 item->setText(sc.name, sc.value);
             }
 
+            item->setDarkTheme(isDarkTheme());
             colLayout->addWidget(item);
         }
 

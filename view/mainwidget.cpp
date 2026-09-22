@@ -37,6 +37,7 @@ void MainWidget::setJsonData(const QString &data)
     m_mainView = new ShortcutView(this);
     m_mainView->setObjectName("MainView");
     m_mainView->setAttribute(Qt::WA_TranslucentBackground);
+    m_mainView->setThemeName(m_themeName);
     m_mainLayout->addWidget(m_mainView);
     m_mainView->setData(data);
     adjustSize();
@@ -48,6 +49,10 @@ void MainWidget::setThemeName(const QString &themeName)
         return;
 
     m_themeName = themeName;
+
+    if (m_mainView)
+        m_mainView->setThemeName(themeName);
+
     update();
 }
 
