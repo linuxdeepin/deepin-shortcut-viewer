@@ -21,14 +21,17 @@ public:
 
     explicit ShortcutView(QWidget *parent = nullptr);
     void setData(const QString &data);
+    void setThemeName(const QString &themeName);
 
 private:
     void initUI();
     void calcColumnData();
     int itemSpacing();
+    bool isDarkTheme() const;
 
 private:
     QHBoxLayout *m_mainLayout = nullptr;
+    QString m_themeName;
 
     using ColData = QList<Shortcut>;
     ColData m_shortcutList;

@@ -5,7 +5,6 @@
 #include "shortcutitem.h"
 
 #include <DPalette>
-#include <DPaletteHelper>
 #include <DGuiApplicationHelper>
 #include <DFontSizeManager>
 
@@ -18,21 +17,19 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
     : QWidget(parent),
       m_isGroup(isGroup)
 {
-    QColor textColor = QColor(65, 77, 104);
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType)
-        textColor = QColor(192, 198, 212);
-    QPalette labelPalette;
-    labelPalette.setColor(QPalette::WindowText, textColor);
+    // 默认跟随查看器自身主题，调用方可通过 setDarkTheme 用 --theme 参数覆盖，
+    // 以保证弹窗文字与背景使用同一套主题（避免系统深色 + 应用浅色时文字发虚）。
+    m_darkTheme = DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType;
 
     m_nameLabel = new QLabel(this);
     m_nameLabel->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_nameLabel->setWordWrap(true);
-    m_nameLabel->setPalette(labelPalette);
 
     m_valueLabel = new QLabel(this);
     m_valueLabel->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_valueLabel->setWordWrap(true);
-    m_valueLabel->setPalette(labelPalette);
+
+    updateTextPalette();
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(m_nameLabel);
@@ -117,10 +114,34 @@ bool ShortcutItem::enableBackground() const
     return m_hasBackground;
 }
 
+void ShortcutItem::setDarkTheme(bool dark)
+{
+    if (m_darkTheme == dark)
+        return;
+
+    m_darkTheme = dark;
+    updateTextPalette();
+}
+
+void ShortcutItem::updateTextPalette()
+{
+    const QColor textColor = m_darkTheme ? QColor(192, 198, 212) : QColor(65, 77, 104);
+    QPalette labelPalette;
+    labelPalette.setColor(QPalette::WindowText, textColor);
+
+    if (m_nameLabel)
+        m_nameLabel->setPalette(labelPalette);
+    if (m_valueLabel)
+        m_valueLabel->setPalette(labelPalette);
+}
+
 void ShortcutItem::paintEvent(QPaintEvent *event)
 {
     if (m_hasBackground) {
-        const DPalette &dp = DPaletteHelper::instance()->palette(this);
+        // 分组标题背景同样使用 --theme 指定的主题，避免与弹窗背景不一致。
+        DPalette dp;
+        DGuiApplicationHelper::generatePalette(
+            dp, m_darkTheme ? DGuiApplicationHelper::DarkType : DGuiApplicationHelper::LightType);
         QPainter p(this);
         p.setPen(Qt::NoPen);
         p.setBrush(dp.brush(DPalette::ItemBackground));
