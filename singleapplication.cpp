@@ -6,6 +6,8 @@
 #include "commandlinemanager.h"
 #include "view/mainwidget.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QProcess>
@@ -83,6 +85,13 @@ void SingleApplication::processArgs(const QStringList &list)
 
     QString jsonData = cmdManager.jsonData();
     QPoint pos = cmdManager.pos();
+
+    QString theme = cmdManager.themeType();
+    if (theme == "dark") {
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
+    } else if (theme == "light") {
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+    }
 
     static MainWidget *w = Q_NULLPTR;
 
