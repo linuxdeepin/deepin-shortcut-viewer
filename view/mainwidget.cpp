@@ -98,9 +98,11 @@ void MainWidget::mousePressEvent(QMouseEvent *e)
 void MainWidget::keyReleaseEvent(QKeyEvent *e)
 {
     if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
+        // Releasing the modifier that opened the panel must not close it:
+        // the panel is expected to stay until the user dismisses it.
         releaseKeyboard();
-        DBlurEffectWidget::keyReleaseEvent(e);
-        hide();
+        e->accept();
+        return;
     }
 }
 
@@ -125,12 +127,8 @@ void MainWidget::showEvent(QShowEvent *e)
     setFocus(Qt::MouseFocusReason);
     grabKeyboard();
 
-    QTimer::singleShot(500, this, [this]() {
-        if (DApplication::queryKeyboardModifiers() != (Qt::ShiftModifier | Qt::ControlModifier)) {
-            qDebug() << "Modifier keys not pressed, hiding window";
-            hide();
-        }
-    });
+    // Do not auto-hide after the modifier keys are released: the panel must
+    // remain visible until the user dismisses it (Escape, Back or a click).
 }
 
 void MainWidget::hideEvent(QHideEvent *e)
