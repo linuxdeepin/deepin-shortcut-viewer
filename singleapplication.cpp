@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2026 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -101,24 +101,36 @@ void SingleApplication::processArgs(const QStringList &list)
         w = new MainWidget();
     }
 
-    // 先隐藏窗口，设置数据后触发布局计算
-    w->hide();
-    w->setJsonData(jsonData);
+    if (w->isVisible()) {
+        // 后续刷新：窗口已可见，仅更新数据与尺寸，不隐藏/显示避免闪烁
+        // setJsonData() 内部已调用 adjustSize()，无需重复调用
+        w->setJsonData(jsonData);
+        QApplication::processEvents();
+        pos -= QPoint(w->width() / 2, w->height() / 2);
+        if (w->pos() != pos) {
+            w->move(pos);
+        }
+        w->setFocus();
+    } else {
+        // 首次创建：隐藏窗口，设置数据后触发布局计算
+        w->hide();
+        w->setJsonData(jsonData);
 
-    if (cmdManager.enableBypassWindowManagerHint()) {
-        qDebug() << "Setting bypass window manager hint";
-        w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
+        if (cmdManager.enableBypassWindowManagerHint()) {
+            qDebug() << "Setting bypass window manager hint";
+            w->setWindowFlags(w->windowFlags() | Qt::BypassWindowManagerHint);
+        }
+
+        // 强制处理事件并调整大小
+        QApplication::processEvents();
+        w->adjustSize();
+
+        // 计算居中位置并移动到正确位置后显示
+        pos -= QPoint(w->width() / 2, w->height() / 2);
+        w->move(pos);
+        w->show();
+        w->setFocus();
     }
-
-    // 强制处理事件并调整大小
-    QApplication::processEvents();
-    w->adjustSize();
-
-    // 计算居中位置并移动到正确位置后显示
-    pos -= QPoint(w->width() / 2, w->height() / 2);
-    w->move(pos);
-    w->show();
-    w->setFocus();
 }
 
 bool SingleApplication::setSingleInstance(const QString &key)
