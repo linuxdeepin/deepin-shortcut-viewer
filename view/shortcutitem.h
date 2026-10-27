@@ -17,6 +17,7 @@ public:
     void setText(const QString &name, const QString &value);
     QString name() const;
     QString value() const;
+    void setItemWidth(int width);
 
     void setEnableBackground(bool enable);
     bool enableBackground() const;

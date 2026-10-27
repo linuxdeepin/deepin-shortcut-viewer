@@ -81,7 +81,7 @@ ShortcutItem::ShortcutItem(bool isGroup, QWidget *parent)
         width = 360;
 
     setLayout(mainLayout);
-    setFixedWidth(width);
+    setMaximumWidth(width);
 }
 
 void ShortcutItem::setText(const QString &name, const QString &value)
@@ -110,6 +110,11 @@ void ShortcutItem::setEnableBackground(bool enable)
 
     m_hasBackground = enable;
     update();
+}
+
+void ShortcutItem::setItemWidth(int width)
+{
+    setFixedWidth(width);
 }
 
 bool ShortcutItem::enableBackground() const

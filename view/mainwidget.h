@@ -37,6 +37,7 @@ private:
     void initMargins();
 
     ShortcutView *m_mainView = nullptr;
+    int m_contentMargin = CONTENT_MARGINS;
     QVBoxLayout *m_mainLayout = nullptr;
 };
 

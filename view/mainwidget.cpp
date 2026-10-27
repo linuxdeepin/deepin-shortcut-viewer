@@ -36,6 +36,7 @@ void MainWidget::setJsonData(const QString &data)
     m_mainView = new ShortcutView(this);
     m_mainView->setObjectName("MainView");
     m_mainLayout->addWidget(m_mainView);
+    m_mainView->setContentMargin(m_contentMargin);
     m_mainView->setData(data);
     adjustSize();
 }
@@ -81,11 +82,15 @@ void MainWidget::initMargins()
         QSize screenSize = primaryScreen->size();
         if (screenSize.width() > 2000)
             isNormal = true;
+        // 竖屏方向使用紧凑边距
+        if (screenSize.height() > screenSize.width())
+            isNormal = false;
     }
     int margin { CONTENT_MARGINS };
     if (!isNormal)
         margin = 10;
 
+    m_contentMargin = margin;
     setContentsMargins(margin, margin, margin, margin);
 }
 
